@@ -11,7 +11,7 @@ public class TestDivide
 			// We will store each index in a variable that we can access if an exception is thrown:
 			int indexUsed = 0;                 // Records the index value for each element reference.
 			int numerator;                     // Store for numerator in division.
-			int denominator;                   // Store for denominator in division.
+			int denominator;                   // Store for denominator in division  .
 
 		try
 		{
