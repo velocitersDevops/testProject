@@ -8,7 +8,7 @@ public class AvoidOverwritingFileThreeDigit {
 
 public static void main(String[] args) {
     String filepath = "E:\\New folder\\newFile.txt";
-
+ String filepathh = "E:\\New folder\\newFile.txt";
     if(args.length>0) {                            
       filepath = args[0];  
       }                      
