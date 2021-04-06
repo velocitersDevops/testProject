@@ -13,48 +13,42 @@ public class TestParseInput
 	{
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter Your String with specific delimeter");
-		String str = sc.nextLine();
+		String enterdString = sc.nextLine();
 		System.out.println("Enter saprator");
 	    String separater = sc.next();
 	    char separator =separater.charAt(0);//returns  seprator 
 	   
 	try {
-	        Reader reader = new StringReader(str);
+	        Reader reader = new StringReader(enterdString);
 	        StreamTokenizer tokenizer = new StreamTokenizer(reader);
 	        tokenizer.whitespaceChars(separator,separator); 
 	        
-	        int i=0;
+	      
 	        while(tokenizer.nextToken()!=StreamTokenizer.TT_EOF)
 	        {
 	        	if(tokenizer.ttype == tokenizer.TT_WORD)
 	        	{
-	        		inputdata[i] = tokenizer.sval;
+	        		  
+	        		 System.out.printf("\"");
+	        		 System.out.printf(tokenizer.sval);
+	        		 System.out.printf("\"");
+	        		 System.out.println();
 	        	}
 	        	 
 	        	if(tokenizer.ttype == tokenizer.TT_NUMBER)
 	        	{
-	        		double data = tokenizer.nval;
-	        		inputdata[i] = Double. toString(data);
+	        		System.out.printf("\"");
+	        		 System.out.printf("%.0f", tokenizer.nval);
+	        		 System.out.printf("\"");
+	        		 System.out.println();
 	        	}
-	        	i++;
+	        	
 	        }
-	       // Object item[] =null;
+	 
 	}catch(IOException ioException)
 	{
      System.err.println("Have some issues,pleade try again");		
 	}
-	        for(int j=0;j<inputdata.length-1;j++)
-	        {
-	        	
-	    	 // int numericValue = Integer.parseInt(inputdata[j]); 
-	    	 // System.out.println(numericValue);
-        		System.out.printf("\"");
-        		 System.out.printf(inputdata[j]);
-        		 System.out.printf("\"");
-        		 System.out.println();
-        		
-        		 
-	        }
 		
 	}
 }
