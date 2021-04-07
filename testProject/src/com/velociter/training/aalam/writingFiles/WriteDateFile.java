@@ -5,10 +5,30 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class WriteDateFile
 {
 
+	public static String convertByteArraysToBinary(byte[] input)
+	{
+        StringBuilder result = new StringBuilder();
+        for (byte b : input) 
+        {
+            int val = b;
+            for (int i = 0; i < 8; i++) 
+            {
+                result.append((val & 128) == 0 ? 0 : 1);      // 128 = 1000 0000
+                val <<= 1;
+            }
+        }
+        return result.toString();
+    }
+	public static String prettyBinary(String binary)
+	{
+		return binary;
+		
+	}
 	public static void main(String[] args) 
 	{
 		
@@ -128,7 +148,7 @@ public class WriteDateFile
 
          String directoryName = "e:/datess";   //we ave to create folder with name proverbs in same location
          String textDate = "date.txt"; 
-         String binaryDate = "binarydate.txt"; 
+         String binaryDate = "binarydate.bin"; 
          
          File textFile =  new File(directoryName,textDate);
          File binaryFile =  new File(directoryName,binaryDate);
@@ -138,7 +158,7 @@ public class WriteDateFile
  		try
  		{
  			textOutputStream = new FileOutputStream(textFile,true);
- 			textOutputStream = new FileOutputStream(binaryFile,true);
+ 			binaryOutputStream = new FileOutputStream(binaryFile,true);
  			
  		}catch(FileNotFoundException e)
  		{
@@ -148,10 +168,12 @@ public class WriteDateFile
        
  		
  		//file will write here
- 		String[] newDate=new String[dates.length];
+ 		String newDate=null;
  	try
  	{
  		FileWriter fileWriterObject = new FileWriter(textFile);
+ 		FileWriter binaryDataObject = new FileWriter(binaryFile);
+ 		
  		for(String date  : dates)
  		{
  			if(date != null)
@@ -161,19 +183,17 @@ public class WriteDateFile
  			
  			if(dates !=null)
  			{
- 		     
- 		    for(int i=0;i<dates.length;i++)
- 		    {
- 		    	//write logic for change order
- 		    	String temp;
- 		    	newDate[i] = dates.split(" ");
- 		    	
- 		    }
- 			  
+ 				newDate =dates.toString();
+ 				String result = convertByteArraysToBinary(newDate.getBytes(StandardCharsets.UTF_8));
+ 				System.out.println(prettyBinary(result));
+ 				binaryDataObject.write(prettyBinary(result));
+// 				System.out.println("Successfully written Binary data to the file");
  			}
  			
  			
  		}
+ 		binaryDataObject.close();
+ 	
  		fileWriterObject.close();
  		System.out.println("Successfully wroted to the file.");
  	}catch(IOException e)
