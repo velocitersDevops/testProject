@@ -1,0 +1,35 @@
+package com.velociter.training.ankit.accessfile;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
+public class AvoidOverwritingFile {
+	
+	 public static void main(String[] args) {
+		    String filepath = "E:\\New folder\\newCreation.txt";
+		    File aFile = new File(filepath);
+		    FileOutputStream outputFile = null;         
+		    if (aFile.isFile()) {
+		      File newFile = aFile;                     
+		      do {
+		        String name = newFile.getName();       
+		        int period =  name.indexOf('.');       
+		        if(period == -1) {                                                             
+		          newFile = new File(newFile.getParent(), name + "_old");                      
+		         }else {                                                                               
+		          newFile = new File(newFile.getParent(),name.substring(0, period) + "_old" + name.substring(period));
+		         }
+		      } while (!aFile.renameTo(newFile));        
+		    } 
+
+		    try {
+
+		      outputFile = new FileOutputStream(aFile);
+		      System.out.println(aFile.getName()+" output stream created");
+		    } catch (FileNotFoundException e) {
+		      e.printStackTrace(System.err);
+		    } 
+		    System.exit(0);
+		  }
+}
