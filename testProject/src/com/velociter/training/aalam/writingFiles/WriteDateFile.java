@@ -185,9 +185,9 @@ public class WriteDateFile
  			{
  				newDate =dates.toString();
  				String result = convertByteArraysToBinary(newDate.getBytes(StandardCharsets.UTF_8));
- 				System.out.println(prettyBinary(result));
+ 				//System.out.println(prettyBinary(result));
  				binaryDataObject.write(prettyBinary(result));
-// 				System.out.println("Successfully written Binary data to the file");
+ 				//System.out.println("Successfully written Binary data to the file");
  			}
  			
  			
