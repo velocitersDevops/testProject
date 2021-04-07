@@ -125,8 +125,8 @@ public class DatesWriting {
 						}
 			
         }
-	    String dirName = "E:\\New folder";   // Directory for the output file
-	    String fileName = "WriteDates.txt";// Name of the output file
+	    String dirName = "E:\\New folder";  
+	    String fileName = "WriteDates.txt";
 	    File newFile=new File(dirName, fileName);
 	    try 
 	    {
@@ -141,8 +141,7 @@ public class DatesWriting {
 	        FileWriter myWriter = new FileWriter(newFile);
 	        for(String date :datesWrite) { 
 	        	myWriter.write(date+String.format("%n"));
-	        	//myWriter.n
-	        	}
+	        }
 	       myWriter.close();
 	        System.out.println("Successfully wrote to the file.");
 	      } catch (IOException e) {
