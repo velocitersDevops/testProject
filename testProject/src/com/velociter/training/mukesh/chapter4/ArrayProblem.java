@@ -1,8 +1,8 @@
 // create 12 random decimal values between 0.0 and 100.0 and assign with months name.
 //also calculate average of decimal values.
+package com.velociter.training.mukesh.chapter4;
 
 
-package com.velociters.chapter4;
 import java.text.DecimalFormat;
 public class ArrayProblem
 {
