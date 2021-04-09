@@ -4,7 +4,7 @@
 //OUTPUT: 29th October 1999.
 
 
-package com.velociters.chapter4;
+package com.velociter.training.mukesh.chapter4;
 public class DateFormatting 
 {
 	public static void main(String[] args)
