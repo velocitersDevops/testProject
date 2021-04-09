@@ -5,7 +5,7 @@
 //OUTPUT: “oT eb ro ton ot eb.”
 
 
-package com.velociters.chapter4; 
+package com.velociter.training.mukesh.chapter4;
 
 public class ReverseWord 
 {

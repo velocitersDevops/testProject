@@ -5,7 +5,7 @@
 //Output the table as 13 columns with the numeric values right-aligned in columns.
 
 
-package com.velociters.chapter4;
+package com.velociter.training.mukesh.chapter4;
 public class MatrixNcrossN 
 {
 	   public static void matrix(int TABLE_SIZE)          //create method named matrix which takes final int table size as a argument
