@@ -24,7 +24,6 @@ public class BankOperationWithSuperviser
 		 //Adding clerk to supervisor team
 		  for(String clerkName : clerkNames)
 		  {
-			 
 			  supervisorsObject[pick++ % supervisorsObject.length].addClerk(new ClerkWithSupervisor(bankObject, clerkName)); 
 			  //System.out.println("above code alway index will be 0 or 1");
 		  }
