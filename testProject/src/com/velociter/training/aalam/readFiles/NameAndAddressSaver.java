@@ -149,12 +149,12 @@ public class NameAndAddressSaver
 		   File fileObject = new File("e:/uppending/NamesAndAddresses.txt");
 		   BufferedReader br = new BufferedReader(new FileReader(fileObject)); //fileReader Read files then stored in buffered
 		   
-		   String st;
+		   String personDetails;
 		 
-			   while ((st = br.readLine()) != null)  //here from buffered to string
+			   while ((personDetails = br.readLine()) != null)  //here from buffered to string
 			   {
 				 
-			     System.out.println(st);
+			     System.out.println(personDetails);
 			   }
 		     } 
 		     catch (IOException e) 

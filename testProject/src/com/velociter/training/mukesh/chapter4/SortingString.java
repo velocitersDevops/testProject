@@ -4,7 +4,7 @@
 //OUTPUT: sort string This to want 
 
 
-package com.velociters.chapter4;
+package com.velociter.training.mukesh.chapter4;
 public class SortingString
 {
 			public static void sortString(String string)
