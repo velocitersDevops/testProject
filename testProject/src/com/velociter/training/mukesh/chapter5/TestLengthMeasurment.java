@@ -1,4 +1,3 @@
-
 /*PROBLEM DISCREPTION:
 
 Define a class, LengthMeasurment, to represent a length measured in meter, centimeter, and millimeter, each
@@ -23,7 +22,7 @@ Check the class by creating some objects and testing the class operations.
  
 
 
-package com.velociter.training.mukesh;
+package com.velociter.training.mukesh.chapter5;
 
 class LengthMeasurment 
 {
