@@ -1,4 +1,4 @@
-package com.velociter.training.mukesh;
+package com.velociter.training.mukesh.chapter5;
 
 class WeightMeasurment {
 	  public static final int KILOGRAMS_PER_TON = 1000;
