@@ -2,10 +2,11 @@ package com.velociter.training.aalam.chepter6;
 
 public class TestLList 
 {
-  public static void main(String args[]) {
+  public static void main(String args[]) 
+  {
     LinkedList myList = new LinkedList();
     Double value = new Double(0.0);	// Only so getClass() is callable.
-    String[] words = {"The", "cat", "sat", " on", "the", "mat"};
+    String[] words = {"raju", "anwar", "akhtar", " rohit", "akash", "sonu"};
    
 
     // Append 5 Doubles to the list:

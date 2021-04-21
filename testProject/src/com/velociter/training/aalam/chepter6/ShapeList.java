@@ -6,9 +6,11 @@
 // a variable of type Shape can store any kind of shape of a sub-class type.
 package com.velociter.training.aalam.chepter6;
 
-public class ShapeList {
+public class ShapeList 
+{
   // Construct a ShapeList from a single shape:
-  public ShapeList(Shape shape) {
+  public ShapeList(Shape shape) 
+  {
     // Create a one shape list:
     start = new ShapeNode(shape);
     end = start;
@@ -37,47 +39,53 @@ public class ShapeList {
 
 
   // Output all the shapes in the list
-  public void show() {
+  public void show() 
+  {
     System.out.println("\nShapeList shapes are:");
     ShapeNode current = start;		             // set current to reference start
 
-    while(current != null) {		               // If there is a current shape
-      current.show();                          // display it
-      current = current.getNext();	           // Get the next element in the list.
+    while(current != null) 
+    {		                                    // If there is a current shape
+      current.show();                           // display it
+      current = current.getNext();	            // Get the next element in the list.
     }
   }
 
-  private ShapeNode start;    // Reference to first Shape in List.
-  private ShapeNode end;    // Reference to last Shape in List.
+  private ShapeNode start;                       // Reference to first Shape in List.
+  private ShapeNode end;                         // Reference to last Shape in List.
 
   // Inner class defines a node in a linked list of shapes
-  class ShapeNode {
-    ShapeNode next;	// a reference to the next shape node in the list
-    Shape shape;		// a reference to the shape object.
+  class ShapeNode 
+  {
+    ShapeNode next;	                               // a reference to the next shape node in the list
+    Shape shape;		                           // a reference to the shape object.
 
     // Constructor
-    public ShapeNode(Shape shape) {
+    public ShapeNode(Shape shape) 
+    {
       this.shape = shape;	        // Store the Shape object
       next = null;                      // Initialize the next reference
     }
 
     // Method to set the reference to the next shape
-    public void setNext(ShapeNode next) {
+    public void setNext(ShapeNode next) 
+    {
       this.next = next;
     }
 
     // Get the reference to the next shape
-    public ShapeNode getNext() {
+    public ShapeNode getNext()
+    {
       return next;
     }
 
-    // Overrides the method inherited from Object
-    public String toString() {
+    public String toString() 
+    {
       return shape.toString();
     }
 
-    // Output the shape contained in the ShapeNode
-    public void show() {
+    public void show() 
+    {
       System.out.println(toString());
     }
   }
