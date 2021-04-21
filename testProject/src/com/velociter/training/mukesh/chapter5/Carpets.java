@@ -1,18 +1,18 @@
-package com.velociter.training.mukesh.measurment;
-import com.velociter.training.mukesh.measurment.WeightMeasurment;
-import com.velociter.training.mukesh.measurment.LengthMeasurment;
+package com.velociter.training.mukesh.chapter5;
+import com.velociter.training.mukesh.chapter5.WeightMeasurment;
+import com.velociter.training.mukesh.chapter5.LengthMeasurment;
 public class Carpets 
 {
 	  public static void main(String args[]) 
 	  {
-		  LengthMeasurment[] carpetLengths = { new LengthMeasurment(4,0,0), new LengthMeasurment(3,57,0) };
-		  LengthMeasurment[] carpetWidths = { new LengthMeasurment(2,9,0), new LengthMeasurment(5,0,0) };
-		      double[] carpetWeightPerSquareMeter = { 1.25, 1.05 };                          // Weight per square m of carpets
+		      LengthMeasurment[] carpetLengths = { new LengthMeasurment(4,0,0), new LengthMeasurment(3,57,0) };
+		      LengthMeasurment[] carpetWidths = { new LengthMeasurment(2,9,0), new LengthMeasurment(5,0,0) };
+		      double[] carpetWeightPerSquareMeter = { 1.25, 1.05 };                                			// Weight per square m of carpets
 		      int[] carpetCounts = { 200, 60 };
 		 
 			 
-			    WeightMeasurment carpetWeight = null;                                    // Store for reference to weight of a carpet
-			    double carpetArea = 0.0;                                          // Store for area of a carpet
+			    WeightMeasurment carpetWeight = null;                                    				// Store for reference to weight of a carpet
+			    double carpetArea = 0.0;                                                                // Store for area of a carpet
 			 
 		 
 		    for(int i = 0 ; i < carpetLengths.length ; ++i) 

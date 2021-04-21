@@ -14,9 +14,7 @@ passed as an argument.
 */
 
 
-package com.velociter.training.mukesh;
-
-
+package com.velociter.training.mukesh.chapter5;
 class Point 
 {
 	//these two variables declare to store the coo-ordinate points
