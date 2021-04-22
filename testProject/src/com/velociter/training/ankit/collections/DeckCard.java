@@ -33,7 +33,7 @@ public class DeckCard {
 		shuffledDeck.add(deck.get(selection));   
 		//System.out.println(shuffledDeck);
 		}
-		StringBuffer[] handsOfcard = { new StringBuffer("1st Hand :"), new StringBuffer("2nd Hand :"),new StringBuffer("3rd Hand :"), new StringBuffer("4th Hand :")};
+		StringBuffer[] handsOfcard = { new StringBuffer("1st Hand :"), new StringBuffer("2nd Hand :"),new StringBuffer("3rd Hand :"),new StringBuffer("4th Hand :")};//4 Part Me divide hoga 52/4=13; 
         ListIterator<String> cards = shuffledDeck.listIterator();
 
 		while (cards.hasNext())
