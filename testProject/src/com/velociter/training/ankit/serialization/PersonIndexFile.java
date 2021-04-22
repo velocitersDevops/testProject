@@ -56,8 +56,7 @@ class Person implements Serializable
 }
 class Index implements Serializable
 {
-
-	private int index;
+    private int index;
 	private String secondName;
 	
 	Index(int index ,String secondName)
