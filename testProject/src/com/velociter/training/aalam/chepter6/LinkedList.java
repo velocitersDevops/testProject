@@ -46,12 +46,12 @@ public class LinkedList
 			      start = end = newEnd;                 // Yes, so new element is start and end
 			    } 
 			    else 
-			    {                                		// No, so append new element
-			      end.next = newEnd;                    // Set next variable for old end
-			      newEnd.previous = end;                // Set previous as old end item  
+			    {                                		
+			      end.next = newEnd;                  
+			      newEnd.previous = end;               
 			      end = newEnd;                         // Store new item as end 
 			    }
-			    ++count;                                // Increment count of list items  
+			    ++count;                                
 		  }
 
 		  // Get the first object in the list

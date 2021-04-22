@@ -5,23 +5,25 @@
 // it would be an abstract class.
 
 package com.velociter.training.aalam.chepter6;
-public class Circle extends Shape {
-  // Constructor
-  public Circle(Point center, double radius) {
-    // Center of the circle is the position:
-    position = new Point(center);	// Store position - new Point object for independence.
-    this.radius = radius;		// Store the radius.
-  }
+public class Circle extends Shape
+{
+	private double radius; // Radius of circle.
 
-  // Overrides method inherited from Object:
-  public String toString() { 
-    // Create a string representation of the object:					
-    return "Circle: Center " + position + " Radius " + radius;
-  }
+	public Circle(Point center, double radius) // Center of the circle is the position:
+	{
+		position = new Point(center);          // Store position - new Point object for independence.
+		this.radius = radius;                  // Store the radius.
+	}
 
-  public void show() {					
-    System.out.println("\n" + toString());
-  }
+	// Overrides method inherited from Object:
+	public String toString() 
+	{
+		return "Circle: Center " + position + " Radius " + radius;
+	}
 
-  private double radius;	// Radius of circle.
+	public void show()
+	{
+		System.out.println("\n" + toString());
+	}
+ 
 }
