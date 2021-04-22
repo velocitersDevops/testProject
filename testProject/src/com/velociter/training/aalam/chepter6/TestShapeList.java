@@ -1,4 +1,4 @@
-// Chapter 6 Exercise 3
+
 
 // Tests the operation of the ShapeList class.
 
