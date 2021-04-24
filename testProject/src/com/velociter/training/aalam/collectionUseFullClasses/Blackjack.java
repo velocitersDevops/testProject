@@ -9,6 +9,8 @@ public class Blackjack
 	public static void main(String[] args)
 	{
 		
+		 String[] pass =new String[1];
+		
 		System.out.println(" Welcome to Blackjack!");
 		System.out.println("=======================");
 		//playingDeck will be the deck the dealer holds
@@ -40,13 +42,16 @@ public class Blackjack
     	 if(playerBetAmount < 0.0)
     	 {
     		 System.err.println("we can't allow you to play the game ! due to break Blackjack game rules");
+    		 //recursion 
+    		  main(pass);
     		 //System.exit(0);
     	 }
     }
      catch(InputMismatchException e )
      {
     	 System.err.println("You Not Entered Valid Amount !");
-    	 System.exit(0);
+    	 main(pass);
+    	// System.exit(0);
      }
 	
 	boolean endRound = false;
@@ -88,12 +93,14 @@ public class Blackjack
 					if( (response <1) || (response >2))
 					{
 						System.err.println("Sorry ! You have to select from given option only ! ");
-					    System.exit(0);
+						 main(pass);
+						//System.exit(0);
 					}
 				}catch(InputMismatchException e)
 				{
 					System.err.println("Sorry You Not Entered Valid Option !Please Try Again");
-				    System.exit(0);
+					 main(pass);
+					// System.exit(0);
 				}
 				
 				//They hit
