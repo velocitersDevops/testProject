@@ -1,38 +1,40 @@
 // Chapter 6 Exercise 3
 
 package com.velociter.training.aalam.chepter6;
-public class Point {
-
-// Constructors:
-
+public class Point 
+{
+	protected double x;
+	protected double y;
+  // Constructors point
   public Point() {
     x = 0.0;
     y = 0.0;
   }
 
   // Construct a Point from its coordinates:
-  public Point(double x, double y) {
+  public Point(double x, double y)
+  {
     this.x = x;
     this.y = y;
   }
 
   // Construct a Point from another Point;
-  public Point(Point point) {
+  public Point(Point point) 
+  {
     x = point.x;
     y = point.y;
   }
 
   // Method to return a point defined relative to this
   // point in coordinates:
-  public Point add(Point z) {
+  public Point add(Point z) 
+  {
     return new Point(x+z.x,y+z.y);
   }
 
   // Overrides the method inherited from Object:
-  public String toString() {
+  public String toString() 
+  {
     return "Point: " + x + "," + y;
   }
-
-  protected double x;
-  protected double y;
 }
