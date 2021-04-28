@@ -25,6 +25,8 @@ public class ReadXmlFile {
 		
 		NodeList list= doc.getChildNodes();
 		
+		//System.out.println(list.getLength());
+		
 		PrintNode(list);
 		
 		
@@ -33,6 +35,7 @@ public class ReadXmlFile {
 	private static void PrintNode(NodeList nList)
 	
 	{
+		int maxLength=0;
 		for(int i=0;i<nList.getLength();i++)
 		{
 		  Node node=nList.item(i);
@@ -41,23 +44,41 @@ public class ReadXmlFile {
 		  
 		  if(node.hasChildNodes() )
 		  {
-			  System.out.println("\n"+node.getNodeName());
+			  System.out.print(node.getNodeName());
+			  
+			  //logic for alignment
+			  String name=node.getNodeName();
+			  int nodeLength=name.length();
+			    if(maxLength<nodeLength)
+			    {
+			      maxLength=nodeLength;	
+			    }
+			    
+			    for(int j=0;j<(maxLength-nodeLength);j++)
+			    {
+			    	System.out.print(" ");
+			    }
+			  
+			    System.out.print("   :");
 			  
 			  if(node.hasAttributes())
 			  {
+				  
+				  System.out.println();
 				  System.out.println("\n"+node.getAttributes().item(0));
+				 // System.out.println("----------");
 			  }
 			  
 			  if(node.getChildNodes().getLength()==1)
 			  {
-				  System.out.println("\n"+node.getTextContent());
+				  System.out.println(node.getTextContent());
 			  }
+			 
 			  
-			//  System.out.println("----------------------------------------------------");
 			  
 			  PrintNode(node.getChildNodes());
+			  
 		  }
-		  
 		  
 		}
 		
