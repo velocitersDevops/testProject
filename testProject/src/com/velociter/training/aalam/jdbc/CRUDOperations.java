@@ -4,7 +4,7 @@ package com.velociter.training.aalam.jdbc;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class CRUD_Operations
+public class CRUDOperations
 {
   	public static void main(String[] args)
 	{
@@ -13,13 +13,13 @@ public class CRUD_Operations
 		while(operationContinueStatus)
 		{
 			System.out.println("Which operation You Want to Perform ");
-			System.out.println(" press 1 for display \n press 2 for insert \n press 3 for update  \n press 4 for delete");
-			Crud_Methods crudOperationObject = new Crud_Methods();
+			System.out.println(" press 1 for display \n press 2 for insert \n press 3 for update  \n press 4 for delete \n press 5 for Even_Records  \n press 6 for Odd_Records ");
+			CrudMethods crudOperationObject = new CrudMethods();
 			
 			int option=0;
 			try {
 				option = scanObject.nextInt();
-				if(option >0  && option <5)
+				if(option >0  && option <7)
 				{
 				  if(option == 1)
 				  {
@@ -36,6 +36,14 @@ public class CRUD_Operations
 				  if(option == 4)
 			 	  {
 					crudOperationObject.delete();
+				  }
+				  if(option == 5)
+			 	  {
+					crudOperationObject.evenRecords();
+				  }
+				  if(option == 6)
+			 	  {
+					crudOperationObject.oddRecords();
 				  }
 				}else
 				{
