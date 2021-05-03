@@ -1,6 +1,16 @@
 package com.velociter.training.vivek.crud.jdbc;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -8,7 +18,7 @@ import java.util.regex.Pattern;
 import javax.naming.CommunicationException;
 
 import com.mysql.cj.jdbc.exceptions.CommunicationsException;
-
+import java.util.*;
 
 public class CrudOperation
 
@@ -17,7 +27,26 @@ public class CrudOperation
 	
 	public static  boolean isName(String name)
 	{
-		return Pattern.matches("[A-Za-z]{3,10}", name);
+		boolean b;
+		b=Pattern.matches("[A-Za-z]{3,10}", name);
+		
+		//System.out.println(name);
+		
+		if(b==true)
+		{
+			b=	name.indexOf(' ') >= 0;
+			
+			if(b==false)
+			{
+				b=true;
+			}
+			else
+			{
+				b=false;
+			}
+		}
+		
+		return b;
 	}
 	
 	public static boolean isID(String id)
@@ -26,6 +55,19 @@ public class CrudOperation
 		
 		b=Pattern.matches("[0-9]+", id);
 		
+		if(b==true)
+		{
+			b=	id.indexOf(' ') >= 0;  //it returns false if string not contain space
+			
+			if(b==false)
+			{
+				b=true;
+			}
+			else
+			{
+				b=false;
+			}
+		}
 		
 		
 		//b=Pattern.matches("[0-9]+", id);
@@ -34,9 +76,68 @@ public class CrudOperation
 		
 	}
 	
-	public static boolean dateValidation(String date)
+	  public static boolean date_of_birthValidation(String date_of_birth) throws ParseException 
+	  {
+		  boolean b=false;
+		  SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
+	      Date date = formatter.parse(date_of_birth);
+	      //Converting obtained Date object to LocalDate object
+	      Instant instant = date.toInstant();
+	      ZonedDateTime zone = instant.atZone(ZoneId.systemDefault());
+	      LocalDate givenDate = zone.toLocalDate();
+	      //Calculating the difference between given date to current date.
+	      Period period = Period.between(givenDate, LocalDate.now());
+	      
+	      System.out.println(period.getYears());
+	      int year=period.getYears();
+	      {
+	    	  if(year<18||year>45)
+	    	  {
+	    		 b=false; 
+	    	  }
+	    	  else
+	    	  {
+	    		  b=true;
+	    	  }
+	      }
+	      
+	      return b;
+		    		
+	  }
+	  
+	  public static boolean date_of_joining(String date_of_joining) throws ParseException 
+	  {
+		  boolean b=false;
+		  SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
+	      Date date1 = formatter.parse(date_of_joining);
+	   // LocalDate newDate=LocalDate.now();
+	      Date date2=formatter.parse("03-05-2021");      //Converting obtained Date object to LocalDate object
+	      Instant instant = date1.toInstant();
+	      ZonedDateTime zone = instant.atZone(ZoneId.systemDefault());
+	      LocalDate givenDate = zone.toLocalDate();
+	      //Calculating the difference between given date to current date.
+	     // Period period = Period.between(givenDate, LocalDate.now());
+	      
+	     // System.out.println(period.getYears());
+	      if(date1.after(date2))
+	      {
+	    	 // System.out.println("vivek");
+	    	  b=false;
+	      }
+	      else if(date1.before(date2))
+	      {
+	    	  //System.out.println("mukesh");
+	    	  b=true;
+	      }
+	      
+	      
+	      return b;
+		    		
+	  }
+	
+	public static boolean dateValidation(String date) 
 	{
-		return Pattern.matches("^(1[0-2]|0[1-9])/(3[01]|[12][0-9]|0[1-9])/[0-9]{4}$", date);
+		return Pattern.matches("^(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])-[0-9]{4}$", date);
 	}
 	
 	
@@ -54,6 +155,9 @@ public class CrudOperation
 	  Connection connection =DriverManager.getConnection("jdbc:mysql://localhost:3306/student_table","root","root");
 	  
 	  Scanner scanner=new Scanner(System.in);
+	  
+	  BufferedReader reader = new BufferedReader(
+	            new InputStreamReader(System.in));
 	  Boolean b=false;
 	  
 	  
@@ -159,7 +263,9 @@ public class CrudOperation
 				  System.out.print("Enter First name ");
 				 // String fadname=scanner.nextLine();
 				  
-				   fname=scanner.next();
+				   //fname=scanner.nextLine();
+				  
+				  fname=reader.readLine();
 				b=CrudOperation.isName(fname);
 				if(b==false)
 				{
@@ -174,7 +280,9 @@ public class CrudOperation
 				while(b==false)
 				{
 				  System.out.println("Enter last name ");
-				   lname=scanner.next();
+				  // lname=scanner.nextLine();
+				  
+				  lname=reader.readLine();
 				  
 				  b=CrudOperation.isName(lname);
 				  if(b==false)
@@ -191,9 +299,12 @@ public class CrudOperation
 				while(b==false)
 				{
 				  System.out.println("Enter your age");
-				   age=scanner.next();
+				 //  age=scanner.nextLine();
+				  
+				  age=reader.readLine();
 				  
 				  b=CrudOperation.isID(age);
+				 
 				  
 				  if(b==true)
 					{
@@ -201,6 +312,7 @@ public class CrudOperation
 						int ageValidation=Integer.parseInt(age);
 						if(ageValidation<18 || ageValidation>63)
 						{
+							System.out.println("");
 							b=false;
 						}
 						
@@ -226,7 +338,9 @@ public class CrudOperation
 				 {
 				  System.out.println("Enter your city");
 				  
-				  city=scanner.next();
+				 // city=scanner.nextLine();
+				  
+				  city=reader.readLine();
 				  
 				 b= CrudOperation.isName(city);    //valildation of city
 				 if(b==false)
@@ -250,39 +364,9 @@ public class CrudOperation
 					 
 					 if(b==true)
 					 {
-						 String month=date_of_joining.substring(0, 1);
-						 int monthLimit=Integer.parseInt(month);
-						 if(monthLimit<1||monthLimit>12)
-						 {
-							System.out.println("Please enter valid month");
-							b=false;
-							break;
-						 }
-						 
-						 else if(b==true)
-						 {
-							 String date=date_of_joining.substring(3, 4);
-							 int dateLimit=Integer.parseInt(date);
-							 if(dateLimit<1||dateLimit>31)
-							 {
-								 System.out.println("Please enter valid date");
-								 b=false;
-								 break;
-							 }
-						 }
-						 
-						 else if(b==true)
-						 {
-							 String year=date_of_joining.substring(6, 9);
-							 int yearLimit=Integer.parseInt(year);
-							 if(yearLimit<2018||yearLimit>2021)
-							 {
-								 System.out.println("Please enter valid year");
-								 b=false;
-								 break;
-							 }
-						 }
+						 b=CrudOperation.date_of_joining(date_of_joining);
 					 }
+					
 				 }
 				 
 				 b=false;
@@ -293,7 +377,9 @@ public class CrudOperation
 				// department=scanner.next();
 				 while(b==false)
 				 {
-					 department=scanner.next();
+					 //department=scanner.next();
+					 
+					 department=reader.readLine();
 					b=CrudOperation.isName(department);
 					
 					if(b==false)
@@ -303,14 +389,38 @@ public class CrudOperation
 					 
 				 }
 				 
-				 
+				 b=false;
 				 
 				  int status=1;                             //set status =1
 				  
-	              Statement st=connection.createStatement();
-	              String sql="insert into emp_info (fname ,lname,age,city,date_of_joining,department,Status) values ('"+fname+"','"+lname+"',"+age+",'"+city+"','"+date_of_joining+"' , '"+department+"' , "+status+")";
+				  String date_of_birth="";
+				  
+				  System.out.println("enter date of birth in MM/dd/YYYY");
+				  
+				  while(b==false)
+				  {
+					 date_of_birth=reader.readLine();
+					 
+					b= CrudOperation.dateValidation(date_of_birth);
+					System.out.println(b);
+					 
+					 if(b==true)
+					 {
+						 b=CrudOperation.date_of_birthValidation(date_of_birth);
+						 
+					 }
+					 if(b==false)
+					 {
+						 System.out.println("Please enter valid date MM/dd/yyyy   or your age should greater than 18 and less than 62");
+					 }
+				  }
+				  
+				  b=false;
+				  
+	             Statement st=connection.createStatement();
+	              String sql="insert into emp_info (fname ,lname,age,city,date_of_joining,department,Status,date_of_birth) values ('"+fname+"','"+lname+"',"+age+",'"+city+"','"+date_of_joining+"' , '"+department+"' , "+status+", '"+date_of_birth+"')";
 				
-	              st.executeUpdate(sql);
+	             int rowCount= st.executeUpdate(sql);
 				  System.out.println("Data enterd successfully ");
 				  
 				 
@@ -1022,6 +1132,48 @@ public class CrudOperation
 					  
 				  }
 			  }
+			  catch(CommunicationsException ee)
+			  {
+				  System.out.println("database not reachable");
+			  }
+			  catch(SQLException e)
+			  {
+				  e.printStackTrace();
+			  }
+			  break;
+			  
+			  
+			  
+		  case 14:
+			  
+			  try
+			  {
+				  Statement statement =connection.createStatement();
+				  
+				  String details_info=" select emp_info.id,family.father_name,family.mother_name from emp_info,family where emp_info.id=family.emp_info_id ";
+				  
+				  ResultSet resultSet = statement.executeQuery(details_info);
+				  
+				  System.out.print("\tid ");
+					System.out.print("\tfname ");
+					System.out.print("\t\tlname ");
+					System.out.println();
+					System.out.println("\t==========================================");
+					
+					while(resultSet.next())
+					{
+						int eid=resultSet.getInt("id");
+						String father_name=resultSet.getString("father_name");
+						String mother_name=resultSet.getString("mother_name");
+						
+						System.out.println("\t"+eid+"\t"+father_name+"\t\t"+mother_name);
+						System.out.println("\t------------------------------------------");
+						
+					}
+				  
+				  
+			  }
+			  
 			  catch(CommunicationsException ee)
 			  {
 				  System.out.println("database not reachable");
