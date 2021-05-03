@@ -12,8 +12,9 @@ public class CRUDOperations
 		boolean operationContinueStatus=true;
 		while(operationContinueStatus)
 		{
-			System.out.println("Which operation You Want to Perform ");
-			System.out.println(" press 1 for display \n press 2 for insert \n press 3 for update  \n press 4 for delete \n press 5 for Even_Records  \n press 6 for Odd_Records ");
+			System.err.println("");
+			System.out.println("\t Which operation You Want to Perform ");
+			System.out.println("\t press 1 for display \n\t press 2 for insert \n\t press 3 for update  \n\t press 4 for delete \n\t press 5 for Even_Records  \n\t press 6 for Odd_Records ");
 			CrudMethods crudOperationObject = new CrudMethods();
 			
 			int option=0;
