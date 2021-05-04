@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
 
@@ -150,4 +151,54 @@ public class Validation
 	}
 		return dob;  
     }//method close
+	
+	//===============================================date of joining validation============================
+	
+	String validJoiningDate =null;
+    public String joinDateValidation(String dateOfJion)
+   {
+    	
+    	if (dateOfJion.matches(dateregex) == false)      
+    	{                                               //if(dateOfJion < currentDate)
+    		//dateOfJion = validationObject.validateDate("joining Date", dateOfJion);       // here we have to pass
+    		boolean status =true;
+    		while(status)
+    		{
+    		try
+    		   {
+    			Calendar cal = Calendar.getInstance();
+    			cal.add(Calendar.DATE, 1);
+    			Date date = cal.getTime();             
+    			SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");          
+    			String inActiveDate = null;
+    			    inActiveDate = format1.format(date);
+    			    String currentDate = inActiveDate;
+    			    System.out.println("current date" +inActiveDate );
+
+    			    System.out.println("joining date "+dateOfJion );
+    		      
+    		        if (dateOfJion.compareTo(currentDate) < 0 )
+    		        {
+    					 System.out.println("if allow when date of join is less then current date  :"+dateOfJion +"  "+currentDate);
+    					 validDate = dateOfJion;
+    					 status =false;
+    					 
+    		        }else
+    		        {
+    		        	 System.err.println("e not allowed  join date can not be accessed from current date :"+dateOfJion +"  "+currentDate);
+    		        	 System.out.println("again enter valid joining date ");
+    		        	 dateOfJion= scanObject.next();
+    		        }
+    		   }catch(Exception e)
+    			{
+    			   System.err.println("Have some Date related Issues ");
+    			  
+    			}
+    		}//while close here
+    	}
+    validDate = dateOfJion ;
+    validJoiningDate =validDate;
+	return validJoiningDate;
+	
+    }
 }

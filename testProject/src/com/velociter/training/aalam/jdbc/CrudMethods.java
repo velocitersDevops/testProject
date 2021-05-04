@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -32,7 +34,9 @@ public class CrudMethods {
 			System.out.println("\tselect option to get Different Kinds of Employee Records");
 			System.out.println(
 					"\t'1' to get All Records \n\t'2' to get Records Between Range \n\t'3' to get Record Alphabaticaly \n\t'4' to get no_Of_Employee in each department"
-							+ "\n\t'5' to get Employee details,if we enter current start date to end date. \n \t'6' Display added family \n\t'7' Display not added family \n\t'8' to Display Employe record who added family Details.\n\t'9' to Go Back");
+							+ "\n\t'5' to get Employee details,if we enter current start date to end date. \n \t'6' Display added family \n\t'7' Display not added family \n"
+							+ "\t'8' to Display Employe record who added family Details.\n\t'9' to check Employe already added family details or not.    \n\t'10' to display employee details whose age between range "
+							+ "\n\t'11' to display expirence employee details \n\t'12' to Go Back'");
 			System.err.println("");
 			String input = scanObject.next();
 			
@@ -119,7 +123,7 @@ public class CrudMethods {
 					System.out.println("\tEnter to Date ");
 					String toDate = scanObject.next();
 					// to get number of employee in eache department
-					query = "select * from employee where Date_Of_Join between " + " " + fromDate + " AND " + toDate;
+					query = "select * from employee where Date_Of_Join between " + " '" + fromDate + "' AND ' " +toDate+"'";
 				}
 				
 				 else if (selectedQueryOption == 6) // validation required
@@ -162,11 +166,134 @@ public class CrudMethods {
 						//System.exit(0);
 				}
 				
-				//to go back
-			      else	if(selectedQueryOption == 9)
+				  else if (selectedQueryOption == 9)
 				{
-						CRUDOperations.main(null);
+					
+					  {	  
+						System.out.println("please Enter valid employee id ");
+						String empId =scanObject.next();
+						int empid =0;
+						if (empId.matches(numberregex) == false) // here performin age validation reexecute logic till not succeed
+						{
+							empid = validationObject.intValidation("employee id", empId);
+						} else {
+							empid = Integer.parseInt(empId);
+						}
+						
+						System.out.println("please Enter Your Father name ");
+						String fatherName =scanObject.next();
+						if (fatherName.matches(stringregex) == false) // here performin age validation reexecute logic till not
+						{
+							fatherName = validationObject.stringValidation("father name", fatherName); // here we have to pass keyword
+						}
+						
+						System.out.println("please Enter Your mother name ");
+						String motherName =scanObject.next();
+						if (motherName.matches(stringregex) == false) // here performin age validation reexecute logic till not
+						{
+							motherName = validationObject.stringValidation("mother Name", motherName); // here we have to pass keyword
+						}
+						 //here checking the record already exist or not
+						 String checkEmpId="select id from family where empId = "+empid;
+						 ResultSet resultSet = statementObject.executeQuery(checkEmpId);
+						  
+						int newId=0;
+						 while(resultSet.next())
+					     {
+							newId=resultSet.getInt("id");
+						 }
+
+						 if(newId  != 0)
+						 {
+							
+							 System.err.println("Already family details added"+newId);
+							 checkEmpId=null;
+							 resultSet=null;
+							 display();
+						 }
+						 else
+						 {
+							
+							 System.out.println("we are adding your family details");
+							 //left query to insert family details
+							 String insertQuery = "insert into family(empId,father_name,mother_name)values("+empid+",'"+fatherName+"',+'"+motherName+"')";
+								int queryStatus = statementObject.executeUpdate(insertQuery);
+								if (queryStatus == 1) {
+									System.out.println("Record inserted successfully ");
+								} else {
+									System.err.println("Record Not inserted ! ");
+								}
+							display();
+						 }	
+					  }
 				}
+				
+				else if (selectedQueryOption == 10) {
+					System.out.println("Enter from age to find records");
+					String fromAge = scanObject.next();
+					int fromage=0;
+					 if (fromAge.matches(numberregex) == false) // here performin age validation reexecute logic till not succeed
+						{
+						 fromage = validationObject.intValidation("fromAge", fromAge);
+						} else {
+							fromage = Integer.parseInt(fromAge);
+						}
+					System.out.println("Enter To age to find records");
+					String toAge = scanObject.next();
+					int toage=0;
+					 if (toAge.matches(numberregex) == false) // here performin age validation reexecute logic till not succeed
+						{
+						 toage = validationObject.intValidation("toAge", toAge);
+						} else {
+							toage = Integer.parseInt(toAge);
+						}
+					query = "select first_name from employee where (year(curdate())-year(date_of_birth)) between "
+							+ fromage + " and " + toage;
+
+					resultSetObject = statementObject.executeQuery(query);
+					if (resultSetObject != null) {
+						System.out.println("\t Employee deatils(First name) ");
+						System.out.println("\t============================");
+						while (resultSetObject.next()) {
+							String firstname = resultSetObject.getString("first_name");
+							System.out.println(" \t " + firstname + " ");
+							System.out.println("\t-----------------------\n");
+						}
+					}
+					display();
+				}
+					
+				 //to go back
+			      else	if(selectedQueryOption == 11)
+				  {
+			    	  System.out.println("Enter expirence of employee ");
+					  String expirence =scanObject.next();
+					  int exPirence=0;
+					  if (expirence.matches(numberregex) == false) // here performin age validation reexecute logic till not succeed
+						{
+						  exPirence = validationObject.intValidation("expirence", expirence);
+						} else {
+							exPirence = Integer.parseInt(expirence);
+						}
+					  query ="select first_name from employee where (year(curdate())-year(Date_Of_Join)) ="+exPirence;
+					  
+					  resultSetObject = statementObject.executeQuery(query);
+						if (resultSetObject != null) {
+							System.out.println("\t Employee deatils(First name)  ");
+							System.out.println("\t============================");
+							while (resultSetObject.next()) {
+								String firstname = resultSetObject.getString("first_name");
+								System.out.println(" \t " + firstname + " ");
+								System.out.println("\t-----------------------\n");
+							}
+						}
+						display();
+						
+				  }
+			      else	if(selectedQueryOption == 12)
+				  {
+						CRUDOperations.main(null);
+				  }
 				
 			} else {
 				System.err.println("You should Enter from given Option Only !");
@@ -177,9 +304,9 @@ public class CrudMethods {
 			// System.out.println("ResultSet");
 			if (resultSetObject != null) {
 				System.out.println(
-						"\t empId \t FirstName \t lastName \t Age \t City \t\t Status \tJoin_Date \t Department \t Date_Of_Birth ");
+						"\t empId \t FirstName \t lastName \t Age \t City \t\t Status \tJoin_Date \t Department \t\t Date_Of_Birth ");
 				System.out.println(
-						"\t=====================================================================================================================");
+						"\t================================================================================================================================================");
 				// Retrieve by column name
 				while (resultSetObject.next()) {
 					int id = resultSetObject.getInt("empId");
@@ -193,9 +320,9 @@ public class CrudMethods {
 					String dob  =  resultSetObject.getString("date_Of_Birth");
 					// display the data
 					System.out.println("       " + "\t" + id + " \t " + firstname + " \t\t" + lastName + " \t\t" + age
-							+ "\t" + city + "\t\t" + status + "\t\t" + joinDate + "\t" + department+"\t"+ dob);
+							+ "\t" + city + "\t\t" + status + "\t\t" + joinDate + "\t" + department+"\t\t"+ dob);
 					System.out.println(
-							"\t----------------------------------------------------------------------------------------------------------------------");
+							"\t-------------------------------------------------------------------------------------------------------------------------------------------------");
 				}
 				System.out.println();
 				display();
@@ -275,104 +402,56 @@ public class CrudMethods {
 			{
 				city = validationObject.stringValidation("City name", city);                     // here we have to pass keyword and non
 			}
-			// validation Required
-			System.out.println("Enter Your Joining Date");
-			String joinDate = scanObject.next();
-			int joindate=0;
-			if (joinDate.matches(numberregex) == false) // here performin age validation reexecute logic till not succeed
-			{
-				joindate = validationObject.intValidation("join Date", joinDate);
-			} else {
-				joindate = Integer.parseInt(joinDate);
-			}
-			if ((joindate < EmployeeInterface.MIN_DATE) || (joindate > EmployeeInterface.MAX_DATE) ) {
-				System.err.println(
-						joindate + " " + "is not valid date ! Try again with valid joindate which will be between 1 to 31");
-				int datee = 0;
-				boolean validdate = true;
-				while (validdate) {
-					System.out.println("Again Enter Your joining date");
-					datee = scanObject.nextInt();
-					if (datee > EmployeeInterface.MIN_DATE) {
-						joindate = datee;
-						validdate = false;
-					} else {
 
-					}
 
-				} // while close here
-			} // if close here
+			System.out.println("Enter Your joining Date");
+			String dateOfJion = scanObject.next();
+			String validJoinDate=null;
+			String validDate=null;
+			String currentDate =null;
 			
-			System.out.println("Enter Your Joining Month(In numbers  like march '03'");
-			String joinMonth = scanObject.next();
-			int joinmonth=0;
-			if (joinMonth.matches(numberregex) == false) // here performin age validation reexecute logic till not succeed
-			{
-				joinmonth = validationObject.intValidation("join Month", joinMonth);
-			} else {
-				joinmonth = Integer.parseInt(joinMonth);
+			if (dateOfJion.matches(dateRegEx) == false) { // if(dateOfJion < currentDate)
+				dateOfJion = validationObject.validateDate("joining Date", dateOfJion); // here we have to pass
+				if (dateOfJion.matches(dateRegEx) == true) {
+					boolean status = true;
+					while (status) {
+						try {
+							Calendar cal = Calendar.getInstance();
+							cal.add(Calendar.DATE, 1);
+							Date date = cal.getTime();
+							SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+							String inActiveDate = null;
+							inActiveDate = format1.format(date);
+							currentDate = inActiveDate;
+							// System.out.println("current date" +inActiveDate );
+							// System.out.println("joining date "+dateOfJion );
+							if (dateOfJion.compareTo(currentDate) < 0) {
+								System.out.println("allow when date of join is less then current date  :" + dateOfJion
+										+ "  " + currentDate);
+								validDate = dateOfJion;
+								status = false;
+							} else {
+								System.err.println(" not allowed  join date can not be accessed from current date :"
+										+ dateOfJion + "  " + currentDate);
+								System.out.println("again enter valid joining date ");
+								dateOfJion = scanObject.next();
+							}
+						} catch (Exception e) {
+							System.err.println("Have some Date related Issues ");
+						}
+					} // while close here
+				}
+		       validDate = dateOfJion ;
+		       System.out.println("actual join date "+validDate);
 			}
+			//======================================================
 			
-			if ((joinmonth < 1) || (joinmonth > 12) ) {
-				System.err.println(
-						joinmonth + " " + "is not valid month ! Try again with valid month which will be between 1 to 12");
-				int month = 0;
-				boolean validmonth = true;
-				while (validmonth) {
-					System.out.println("Again Enter Your joining month");
-					month = scanObject.nextInt();
-					if (month >= 1) {
-						joinmonth = month;
-						validmonth = false;
-					} else {
-
-					}
-
-				} // while close here
-			} // if close here
-
-			System.out.println("Enter Your Joining year");
-			String joinYear = scanObject.next();
-			int joinyear=0;
-			if (joinYear.matches(numberregex) == false) // here performin age validation reexecute logic till not succeed
-			{
-				joinyear = validationObject.intValidation("join Year", joinYear);
-			} else {
-				joinyear = Integer.parseInt(joinYear);
-			}
-			
-			//getting current year
-			int currentyear = Calendar.getInstance().get(Calendar.YEAR);
-		    System.out.println("current year :"+currentyear);
-			if ((joinyear < 0) || (joindate > currentyear ) ) {
-				System.err.println(
-						joinyear+ " " + "is not valid Year ! Try again with valid year");
-				int year = 0;
-				boolean validYear = true;
-				while (validYear) {
-					System.out.println("Again Enter Your joining year");
-					year = scanObject.nextInt();
-					if (year >= 1  && year <=currentyear) {
-						joindate = joinyear;
-						validYear = false;
-					} else {
-
-					}
-
-				} // while close here
-			} // if close here
-
-			System.out.println("joinind date is :"+joinyear+"-"+joinmonth+"-"+joindate+"");
-			joinDate=""+joinyear+"-"+joinmonth+"-"+joindate+"";
-	
 			System.out.println("Enter Your Department");
 			String department = scanObject.next();
 			if (department.matches(stringregex) == false)                                        // here performin age validation reexecute logic till not
 			{
 				department = validationObject.stringValidation("department name", department);   // here we have to pass
-			}
-			
-			
+			}			
 			
 			String status = "0";
 			query = "INSERT INTO employee (first_Name,last_Name,age,city,status,Date_Of_Join,department,date_Of_Birth) "
@@ -386,7 +465,7 @@ public class CrudMethods {
 				preparedSatementObject.setInt(3, agee);
 				preparedSatementObject.setString(4, city);
 				preparedSatementObject.setString(5, status);
-				preparedSatementObject.setString(6, joinDate);
+				preparedSatementObject.setString(6, validDate);
 				preparedSatementObject.setString(7, department);
 				preparedSatementObject.setString(8, dob);
 
@@ -452,6 +531,12 @@ public class CrudMethods {
 			try {
 				empId = scanObject.nextLine();
 				empid = validationObject.intValidation("Employee Id", empId);
+				if (empId.matches(numberregex) == false) // here performin age validation reexecute logic till not succeed
+				{
+					empid = validationObject.intValidation("Employee Id", empId);
+				} else {
+					empid = Integer.parseInt(empId);
+				}
 				if ((empid < 0)) {
 					System.err.println("Employee id cant be negative ! try again with valid Employee id");
 					update();
@@ -465,7 +550,7 @@ public class CrudMethods {
 			column = scanObject.next();
 
 			if ((column.equalsIgnoreCase("First_Name")) || (column.equalsIgnoreCase("Last_Name"))
-					|| (column.equalsIgnoreCase("age")) || (column.equalsIgnoreCase("City")) == true) {
+					|| (column.equalsIgnoreCase("age")) || (column.equalsIgnoreCase("City")) || (column.equalsIgnoreCase("department")) == true) {
 				System.out.println("Enter what You want to update  ");
 				UpdateData = scanObject.next();
 				try {
