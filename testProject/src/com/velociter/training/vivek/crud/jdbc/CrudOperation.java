@@ -1,4 +1,4 @@
-package com.velociter.training.vivek.crud.jdbc;
+package com.velociter.training.jdbc;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -79,7 +79,7 @@ public class CrudOperation
 	  public static boolean date_of_birthValidation(String date_of_birth) throws ParseException 
 	  {
 		  boolean b=false;
-		  SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy");
+		  SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
 	      Date date = formatter.parse(date_of_birth);
 	      //Converting obtained Date object to LocalDate object
 	      Instant instant = date.toInstant();
@@ -137,7 +137,10 @@ public class CrudOperation
 	
 	public static boolean dateValidation(String date) 
 	{
-		return Pattern.matches("^(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])-[0-9]{4}$", date);
+		boolean b=false;
+		b= Pattern.matches("^(1[0-2]|0[1-9])-(3[01]|[12][0-9]|0[1-9])-[0-9]{4}$", date);
+        b=true;
+        return b;
 	}
 	
 	
@@ -213,9 +216,10 @@ public class CrudOperation
 				System.out.print("\t\tcity");
 				System.out.print("\t\tdate_of_joining");
 				System.out.print("\t\t\t\tdepartment");
-				System.out.println("\t\tStatus");
+				System.out.print("\t\tStatus");
+				System.out.println("\t\tdate_of_birth");
 				//System.out.println();
-				System.out.println("\t===============================================================================================================================================");
+				System.out.println("\t==============================================================================================================================================================================");
 				
 				
 				while(resultSet.next())
@@ -230,14 +234,15 @@ public class CrudOperation
 					   String department=resultSet.getString("department");
 					   
 					   int status=resultSet.getInt("Status");
+					   String date_of_birth=resultSet.getString("date_of_birth");
 					   
-					   System.out.print("\t"+id+"\t"+fname+"\t\t"+lname+"\t\t"+age+"\t\t"+city+"\t\t"+date_of_joining+"\t\t\t\t"+department+"\t\t\t"+status);
+					   System.out.print("\t"+id+"\t"+fname+"\t\t"+lname+"\t\t"+age+"\t\t"+city+"\t\t"+date_of_joining+"\t\t\t\t"+department+"\t\t\t"+status+"\t\t"+date_of_birth);
 					  
 					   
 					   System.out.println();
 					
 				}
-				System.out.println("\t------------------------------------------------------------------------------------------------------------------------------------------------");
+				System.out.println("\t--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 			  }
 			  
 			  catch(CommunicationsException ee)
@@ -395,7 +400,7 @@ public class CrudOperation
 				  
 				  String date_of_birth="";
 				  
-				  System.out.println("enter date of birth in MM/dd/YYYY");
+				  System.out.println("enter date of birth in yyyy/mm/dd");
 				  
 				  while(b==false)
 				  {
@@ -1183,6 +1188,122 @@ public class CrudOperation
 				  e.printStackTrace();
 			  }
 			  break;
+			  
+		  case 15:
+			  try
+			  {
+				  String lowerAge="";
+				  String upperAge="";
+				  
+				  while(b==false)
+				  {
+				  System.out.println("Enter the lower age boundary of employee");
+				  lowerAge=reader.readLine();
+				  b=CrudOperation.isID(lowerAge);
+				  
+				  if(b==true)
+				  {
+				  System.out.println("Please enter uper age boundary of employee");
+				  upperAge=reader.readLine();
+				  
+				  b=CrudOperation.isID(upperAge);
+				  }
+				  if(b==false)
+				  {
+					  System.out.println("Please enter valid age");
+				  }
+				  }
+				  
+				  b=false;
+				  
+				  
+				  Statement statement=connection.createStatement();
+				  
+				  
+				  String sqlQuery="select fname from emp_info where (year(curdate())-year(date_of_birth)) between "+lowerAge+" and " +upperAge;
+				  ResultSet resultSet=statement.executeQuery(sqlQuery);
+				  
+				  System.out.println("\t\tfname ");
+				  System.out.println("\t\t=========");
+				  
+				  while(resultSet.next())
+				  {
+					  String fname=resultSet.getString("fname");
+					  System.out.println("\t\t"+fname);
+				  }
+				  
+				  
+				  }
+			  
+				  
+			  
+			  catch(CommunicationsException ee)
+			  {
+				  System.out.println("database not reachable");
+			  }
+			  catch(SQLException e)
+			  {
+				  e.printStackTrace();
+			  }
+			  break;
+			  
+			  
+			  
+		  case 16:
+			  
+			  try
+			  {
+				  String experience="";
+				 // String upperAge="";
+				  
+				  while(b==false)
+				  {
+				  System.out.println("Enter the experience");
+				  experience=reader.readLine();
+				  b=CrudOperation.isID(experience);
+				  
+				 
+				  if(b==false)
+				  {
+					  System.out.println("Please enter valid experience");
+				  }
+				  }
+				  
+				  b=false;
+				  
+				  
+				  Statement statement=connection.createStatement();
+				  
+				  
+				  String sqlQuery="select fname from emp_info where (year(curdate())-year(date_of_joining)) >="+experience;
+				  ResultSet resultSet=statement.executeQuery(sqlQuery);
+				  
+				  System.out.println("\t\tfname ");
+				  System.out.println("\t\t=========");
+				  
+				  while(resultSet.next())
+				  {
+					  String fname=resultSet.getString("fname");
+					  System.out.println("\t\t"+fname);
+				  }
+				  
+				  
+				  }
+			  
+				  
+			  
+			  catch(CommunicationsException ee)
+			  {
+				  System.out.println("database not reachable");
+			  }
+			  catch(SQLException e)
+			  {
+				  e.printStackTrace();
+			  }
+			  break;
+			  
+			  
+			  
 			  default :
 				  System.out.println("You have selected wrong Input ");
 				  break;
