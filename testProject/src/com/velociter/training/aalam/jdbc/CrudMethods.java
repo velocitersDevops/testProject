@@ -36,7 +36,8 @@ public class CrudMethods {
 					"\t'1' to get All Records \n\t'2' to get Records Between Range \n\t'3' to get Record Alphabaticaly \n\t'4' to get no_Of_Employee in each department"
 							+ "\n\t'5' to get Employee details,if we enter current start date to end date. \n \t'6' Display added family \n\t'7' Display not added family \n"
 							+ "\t'8' to Display Employe record who added family Details.\n\t'9' to check Employe already added family details or not.    \n\t'10' to display employee details whose age between range "
-							+ "\n\t'11' to display expirence employee details \n\t'12' to Go Back'");
+							+ "\n\t'11' to display expirence employee details.\n\t'12' display department information .\n\t'13' display 2nd highest employee in department"
+							+ "\n\t'14'  Display employee details,based on department \n\t'15' to Go Back'");
 			System.err.println("");
 			String input = scanObject.next();
 			
@@ -288,9 +289,56 @@ public class CrudMethods {
 							}
 						}
 						display();
-						
 				  }
 			      else	if(selectedQueryOption == 12)
+				  {
+					query ="select * from department";
+					resultSetObject = statementObject.executeQuery(query);
+					if (resultSetObject != null) {
+						System.out.println("\t dpt_id \t dpt_name ");
+						System.out.println("\t=========================");
+						while (resultSetObject.next()) 
+						{
+							int dpt_id = resultSetObject.getInt("dpt_id");
+							String dpt_name = resultSetObject.getString("dpt_name");
+							System.out.println(" \t " + dpt_id + "\t\t"+dpt_name);
+							System.out.println("\t--------------------------\n");
+						}
+					}
+					display();
+					
+				  }
+			      else	if(selectedQueryOption == 13)
+				  {
+						query="SELECT department, MAX(department)  AS department FROM employee WHERE department < (SELECT MAX(department) FROM employee)";
+						resultSetObject = statementObject.executeQuery(query);
+						if (resultSetObject != null) {
+							System.out.println("\t department ( 2nd highest department)");
+							System.out.println("\t=====================================");
+							while (resultSetObject.next()) 
+							{
+								String scndHighestdpt1 = resultSetObject.getString("department");
+								String scndHighestdpt2 = resultSetObject.getString("department");
+								System.out.println("\t"+scndHighestdpt1+" \t"+scndHighestdpt2);
+								System.out.println("\t---------------------------------\n");
+							}
+						}
+						display();
+
+				  }
+			      else	if(selectedQueryOption == 14)
+				  {
+			    	  System.out.println("Enter department name Like:finanDpt , salesDpt ,ProdcDpt ,MaintDpt");
+			    	  String dptName = scanObject.next();
+			    	  if (dptName.matches(stringregex) == false)                                            
+						{
+			    		  dptName = validationObject.stringValidation("department name", dptName);                    
+						}
+
+
+			    	  query="SELECT * from employee where department='"+dptName+"'";
+				  }
+			      else	if(selectedQueryOption == 15)
 				  {
 						CRUDOperations.main(null);
 				  }
@@ -304,9 +352,9 @@ public class CrudMethods {
 			// System.out.println("ResultSet");
 			if (resultSetObject != null) {
 				System.out.println(
-						"\t empId \t FirstName \t lastName \t Age \t City \t\t Status \tJoin_Date \t Department \t\t Date_Of_Birth ");
+						"\t empId \t FirstName \t lastName \t Age \t City \t\t Status \tJoin_Date \t Department \t\t Date_Of_Birth \t\tDpt_Id");
 				System.out.println(
-						"\t================================================================================================================================================");
+						"\t======================================================================================================================================================");
 				// Retrieve by column name
 				while (resultSetObject.next()) {
 					int id = resultSetObject.getInt("empId");
@@ -318,26 +366,26 @@ public class CrudMethods {
 					String joinDate = resultSetObject.getString("Date_Of_Join");
 					String department = resultSetObject.getString("department");
 					String dob  =  resultSetObject.getString("date_Of_Birth");
+					int dptId = resultSetObject.getInt("dpt_id");
 					// display the data
 					System.out.println("       " + "\t" + id + " \t " + firstname + " \t\t" + lastName + " \t\t" + age
-							+ "\t" + city + "\t\t" + status + "\t\t" + joinDate + "\t" + department+"\t\t"+ dob);
+							+ "\t" + city + "\t\t" + status + "\t\t" + joinDate + "\t" + department+"\t\t"+ dob+"\t\t"+dptId);
 					System.out.println(
-							"\t-------------------------------------------------------------------------------------------------------------------------------------------------");
+							"\t-------------------------------------------------------------------------------------------------------------------------------------------------------");
 				}
 				System.out.println();
 				display();
 			} else {
 				System.err.println("Records Not Avaialable ");
 			}
-		  
 		} catch (CommunicationsException connectionFail) {
 			System.err.println("Database Connection failed ! Please check Database Connection");
 			// connectionFail.printStackTrace();
 		} catch (NumberFormatException e) {
 			System.out.println("select option to get Different Kinds of Employee Records");
-			System.out.println(
-					"\t'1' to get All Records \n\t'2' to get Records Between Range \n\t'3' to get Record Alphabaticaly\n");
-		} catch (SQLException e) {
+			System.out.println("\t'1' to get All Records \n\t'2' to get Records Between Range \n\t'3' to get Record Alphabaticaly\n");
+		} catch (SQLException e) 
+		{
 			System.err.println("Have some Database issues ! Try Again");
 			e.printStackTrace();
 		}
@@ -441,8 +489,8 @@ public class CrudMethods {
 						}
 					} // while close here
 				}
-		       validDate = dateOfJion ;
-		       System.out.println("actual join date "+validDate);
+		       
+		       System.out.println("actual join date "+dateOfJion);
 			}
 			//======================================================
 			
@@ -465,7 +513,8 @@ public class CrudMethods {
 				preparedSatementObject.setInt(3, agee);
 				preparedSatementObject.setString(4, city);
 				preparedSatementObject.setString(5, status);
-				preparedSatementObject.setString(6, validDate);
+				//System.out.println("befor inserting joindate :"+dateOfJion);
+				preparedSatementObject.setString(6, dateOfJion);
 				preparedSatementObject.setString(7, department);
 				preparedSatementObject.setString(8, dob);
 
