@@ -217,9 +217,10 @@ public class CrudOperation
 				System.out.print("\t\tdate_of_joining");
 				System.out.print("\t\t\t\tdepartment");
 				System.out.print("\t\tStatus");
-				System.out.println("\t\tdate_of_birth");
+				System.out.print("\t\tdate_of_birth");
+				System.out.println("\t\tdept_id");
 				//System.out.println();
-				System.out.println("\t==============================================================================================================================================================================");
+				System.out.println("\t=====================================================================================================================================================================================================");
 				
 				
 				while(resultSet.next())
@@ -232,17 +233,17 @@ public class CrudOperation
 					   String city=resultSet.getString("city");
 					   String date_of_joining=resultSet.getString("date_of_joining");
 					   String department=resultSet.getString("department");
-					   
+					   int dept_id=resultSet.getInt("dept_id");
 					   int status=resultSet.getInt("Status");
 					   String date_of_birth=resultSet.getString("date_of_birth");
 					   
-					   System.out.print("\t"+id+"\t"+fname+"\t\t"+lname+"\t\t"+age+"\t\t"+city+"\t\t"+date_of_joining+"\t\t\t\t"+department+"\t\t\t"+status+"\t\t"+date_of_birth);
+					   System.out.print("\t"+id+"\t"+fname+"\t\t"+lname+"\t\t"+age+"\t\t"+city+"\t\t"+date_of_joining+"\t\t\t\t"+department+"\t\t\t"+status+"\t\t"+date_of_birth+"\t\t"+dept_id);
 					  
 					   
 					   System.out.println();
 					
 				}
-				System.out.println("\t--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+				System.out.println("\t-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 			  }
 			  
 			  catch(CommunicationsException ee)
@@ -393,6 +394,25 @@ public class CrudOperation
 					}
 					 
 				 }
+				 b=false;
+				 String department_id="";
+				 System.out.println("Enter  department_id ");
+				// department=scanner.next();
+				 while(b==false)
+				 {
+					 //department=scanner.next();
+					 
+					 department_id=reader.readLine();
+					b=CrudOperation.isID(department_id);
+					
+					if(b==false)
+					{
+						System.out.println("Please enter valid department_id");
+					}
+					 
+				 }
+				 
+				 
 				 
 				 b=false;
 				 
@@ -423,7 +443,7 @@ public class CrudOperation
 				  b=false;
 				  
 	             Statement st=connection.createStatement();
-	              String sql="insert into emp_info (fname ,lname,age,city,date_of_joining,department,Status,date_of_birth) values ('"+fname+"','"+lname+"',"+age+",'"+city+"','"+date_of_joining+"' , '"+department+"' , "+status+", '"+date_of_birth+"')";
+	              String sql="insert into emp_info (fname ,lname,age,city,date_of_joining,department,Status,date_of_birth,dept_id) values ('"+fname+"','"+lname+"',"+age+",'"+city+"','"+date_of_joining+"' , '"+department+"' , "+status+", '"+date_of_birth+"', '"+department_id+"')";
 				
 	             int rowCount= st.executeUpdate(sql);
 				  System.out.println("Data enterd successfully ");
@@ -1291,6 +1311,69 @@ public class CrudOperation
 				  }
 			  
 				  
+			  
+			  catch(CommunicationsException ee)
+			  {
+				  System.out.println("database not reachable");
+			  }
+			  catch(SQLException e)
+			  {
+				  e.printStackTrace();
+			  }
+			  break;
+			  
+			  
+		  case 17:
+			  
+			  try
+			  {
+                 Statement statement=connection.createStatement();
+				  
+				  
+				  String sqlQuery=" select distinct (emp_info.fname) from ( select emp_info.fname ,count(dept_id) from emp_info inner join department on emp_info.dept_id=department.id group by emp_info.fname  having count(dept_id)=5) as dept,emp_info where emp_info.fname=dept.fname";
+				  ResultSet resultSet=statement.executeQuery(sqlQuery);
+				  
+				  System.out.println("\t\tfname ");
+				  System.out.println("\t\t=========");
+				  
+				  while(resultSet.next())
+				  {
+					  String fname=resultSet.getString("fname");
+					  System.out.println("\t\t"+fname);
+				  } 
+			  }
+			  
+			  catch(CommunicationsException ee)
+			  {
+				  System.out.println("database not reachable");
+			  }
+			  catch(SQLException e)
+			  {
+				  e.printStackTrace();
+			  }
+			  break;
+			  
+			  
+			  
+		  case 18:
+			  
+			  try
+			  {
+                 Statement statement=connection.createStatement();
+				  
+				  
+				  String sqlQuery="select fname from emp_info where dept_id= 2";
+				  ResultSet resultSet=statement.executeQuery(sqlQuery);
+				  
+				  System.out.println("\t\tfname ");
+				  System.out.println("\t\t=========");
+				  
+				  while(resultSet.next())
+				  {
+					  String fname=resultSet.getString("fname");
+					  System.out.println("\t\t"+fname);
+				  } 
+			  }
 			  
 			  catch(CommunicationsException ee)
 			  {
