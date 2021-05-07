@@ -36,8 +36,8 @@ public class CrudMethods {
 					"\t'1' to get All Records \n\t'2' to get Records Between Range \n\t'3' to get Record Alphabaticaly \n\t'4' to get no_Of_Employee in each department"
 							+ "\n\t'5' to get Employee details,if we enter current start date to end date. \n \t'6' Display added family \n\t'7' Display not added family \n"
 							+ "\t'8' to Display Employe record who added family Details.\n\t'9' to check Employe already added family details or not.    \n\t'10' to display employee details whose age between range "
-							+ "\n\t'11' to display expirence employee details.\n\t'12' display department information .\n\t'13' display 2nd highest employee in department"
-							+ "\n\t'14'  Display employee details,based on department \n\t'15' to Go Back'");
+							+ "\n\t'11' to display expirence employee details.\n\t'12' display department information .\n\t'13' display Nth highest employee in department"
+							+ "\n\t'14' Display employee details,based on department \n\t'15' to Go Back'");
 			System.err.println("");
 			String input = scanObject.next();
 			
@@ -310,20 +310,44 @@ public class CrudMethods {
 				  }
 			      else	if(selectedQueryOption == 13)
 				  {
-						query="SELECT department, MAX(department)  AS department FROM employee WHERE department < (SELECT MAX(department) FROM employee)";
-						resultSetObject = statementObject.executeQuery(query);
-						if (resultSetObject != null) {
-							System.out.println("\t department ( 2nd highest department)");
+						//query="SELECT department, MAX(department)  AS departmnt FROM employee WHERE department < (SELECT MAX(department) FROM employee)";
+			    	    //query= "SELECT dpt_name , MAX(dpt_name) AS dpt_nae FROM department WHERE dpt_name < (SELECT MAX(department) FROM employee)";
+			    	    // query ="select MAX(dpt_name) from department inner join employee on employee.dpt_id = department.dpt_id group by department.dpt_id, department.`dpt_name`limit 1,"+2;
+			          
+			    	  System.out.println("Enter nth highest Number which you want (between 1 to 4");
+			           String nthNumber = scanObject.next();
+			           int nthnumber=0;
+						  if (nthNumber.matches(numberregex) == false) // here performin age validation reexecute logic till not succeed
+							{
+							  nthnumber = validationObject.intValidation("nthNumber", nthNumber);
+							} else {
+								nthnumber = Integer.parseInt(nthNumber);
+							}
+			           //validation
+						  if(nthnumber >0   && nthnumber < 5)
+						  {
+			    	     //  query ="select dpt_name from (select department.dpt_name,count(employee.dpt_id) as employcount from employee,department where employee.dpt_id = department.dpt_id group by employee.dpt_id order by employcount) as newemptable where "+nthnumber+"-1=(select count(distinct(totalemp)) from (select department.dpt_name,count(employee.dpt_id)as totalemp from employee,department where employee.dpt_id =  department.dpt_id group by employee.dpt_id) as newtable where newemptable.employcount < newtable.totalemp);"
+			    	        		//+ "";
+			    	        query =  "  with cte as (select DISTINCT department , dense_RANK() over (order by department desc) as DR from employee) select department from cte where DR = "+nthnumber;
+
+			    	        resultSetObject = statementObject.executeQuery(query);
+						    if (resultSetObject != null) {
+							System.out.println("\t department ( nth highest department)");
 							System.out.println("\t=====================================");
 							while (resultSetObject.next()) 
 							{
-								String scndHighestdpt1 = resultSetObject.getString("department");
-								String scndHighestdpt2 = resultSetObject.getString("department");
-								System.out.println("\t"+scndHighestdpt1+" \t"+scndHighestdpt2);
+								 String scndHighestdpt1  =  resultSetObject.getString("department");
+							    //String scndHighestdpt2  =  resultSetObject.getString("dpt_nam");
+								System.out.println("\t"+scndHighestdpt1);
 								System.out.println("\t---------------------------------\n");
 							}
+						   }
+						   display();
+						}else
+						{
+							System.err.println("You should  select from given option");
+							 display();
 						}
-						display();
 
 				  }
 			      else	if(selectedQueryOption == 14)
@@ -334,8 +358,6 @@ public class CrudMethods {
 						{
 			    		  dptName = validationObject.stringValidation("department name", dptName);                    
 						}
-
-
 			    	  query="SELECT * from employee where department='"+dptName+"'";
 				  }
 			      else	if(selectedQueryOption == 15)
