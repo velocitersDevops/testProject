@@ -14,7 +14,10 @@ public class MysqlOperation {
 	static Scanner new_sc=new Scanner(System.in);
 	static void insert()
 	{
-		System.out.println("Enter Your Choice \n1.Insert Into Employee Table\n2.Insert Into Family Table");
+		int operationChoice= 1;
+        do
+		{
+		System.out.println("Enter Your Choice \n1.Insert Into Employee Table\n2.Insert Into Family Table\n3.Exit");
 		int choice=new_sc.nextInt();
 		switch(choice)
 		{
@@ -49,6 +52,34 @@ public class MysqlOperation {
 		System.out.println("Department");
 		String department=sc.nextLine();
 		department=department.replaceAll("[^a-zA-Z]","");
+		String dept_id="";
+		
+		if(department.contains("Account"))
+		{
+			dept_id=""+1;
+		}
+		else if(department.contains("Hacking"))
+		{
+			dept_id=""+2;
+		}
+		else if(department.contains("Develop"))
+		{
+			dept_id=""+3;
+		}
+		else if(department.contains("Pharma"))
+		{
+			dept_id=""+4;
+		}
+		else if(department.contains("Testing"))
+		{
+			dept_id=""+5;
+		}
+		else if(department.contains("CSE"))
+		{
+			dept_id=""+6;
+		}
+		
+		
         
 		System.out.println("Date Of Joining ");
 		System.out.println("Please Enter in 'dd-mm-yyyy' Formate ");
@@ -105,7 +136,7 @@ public class MysqlOperation {
         	 Class.forName("com.mysql.cj.jdbc.Driver");
  			Connection connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/student?useSSl=false","root","root");
 			Statement statement = connection.createStatement();
-			String query = "insert into emp_information(first_name,last_name,age,city,dept_name,date_Of_Joining) values('"+first_name+"','"+last_name+"','"+age+"','"+city+"','"+department+"','"+dateOfJoin+"')";
+			String query = "insert into emp_information(first_name,last_name,age,city,dept_name,date_Of_Joining,dept_id) values('"+first_name+"','"+last_name+"','"+age+"','"+city+"','"+department+"','"+dateOfJoin+"','"+dept_id+"')";
 			statement.executeUpdate(query);
 //			'"+identity+"'
 			connection.close();
@@ -148,8 +179,8 @@ public class MysqlOperation {
 				Class.forName("com.mysql.cj.jdbc.Driver");
 	 			Connection connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/student?useSSl=false","root","root");
 				Statement statement = connection.createStatement();
-			String checkEmpId="select Family_Id from family_Table where emp_id = "+emp_id;
-			 ResultSet resultSet = statement.executeQuery(checkEmpId);
+			String checkId="select Family_Id from family_Table where emp_id = "+emp_id;
+			 ResultSet resultSet = statement.executeQuery(checkId);
 			  
 			int newId=0;
 			 while(resultSet.next())
@@ -158,8 +189,8 @@ public class MysqlOperation {
 			 }
              if(newId  != 0)
 			 {
-				System.err.println("Already family details added at "+newId+"\n");
-				 checkEmpId=null;
+				System.err.println("Family details already  added at "+newId+"\n");
+				 checkId=null;
 				 resultSet=null;
 				 insert();
 			 }
@@ -178,18 +209,25 @@ public class MysqlOperation {
 			}
 			break;
 			
+		case 3:
+			System.out.println("Exit From Insert Operation");
+		
+			operationChoice= 2;
+			break;
 		default:
 		  {  
 			System.out.println("InValid Choice");
 	      }
 		}
+		}
+		while(operationChoice== 1);
+		
 		
 	}
 	 
 	static void update()
 	{
 		System.out.println("___________Update Operation__________");
-		display();
 		System.out.println("Enter Employee Identity ");
 		int id=new_sc.nextInt();
 		if(id>0);
@@ -229,8 +267,9 @@ public class MysqlOperation {
 		do
 		{
 		
-		System.out.println("Enter Your Choice \n 1.displayAll\n2.Total Employee in Each Department\n3.employee details whose name starts with given first name or any single character\n4'Display Family Table\n5.Details of employees, who has added family details into the family table.\n6. Display total no. of employees, who has not added family details into the family table\n7.Display total no. of employees, who has added family details into the family table.\n8."
-				+ "Employee details,from current start date to end date\n9.Exit");
+		System.out.println("Enter Your Choice \n1.DisplayAll\n2.Total Employee in Each Department\n3.Employee details whose name starts with given first name or any single character\n4.Display Family Table\n5.Details of employees, who has added family details into the family table.\n6.Display total no. of employees, who has not added family details into the family table\n7.Display total no. of employees, who has added family details into the family table.\n8."
+				+"Employee details,from current start date to end date\n9.Display department name, where the highest number of employees working in that department\n10.Display department name, where the lowest number of employees working in that department\n11.Name.of employees, who are working in the  department in the location\n12.Name of employees,who have joined current month and find name after give input options where users can give month,year and location"
+				+ "\n13.Exit");
 		int choice=new_sc.nextInt();
 		
 		switch(choice)
@@ -332,16 +371,24 @@ public class MysqlOperation {
 				  String query="select * from emp_information where First_Name like '"+empName+"%'";
 				  Statement statement =connection.createStatement();
 				  ResultSet resultSet=statement.executeQuery(query);
-				  System.out.println("       \tIdentity\tFirst Name\tLast Name\tAge\tCity     \tDepartment\tDate Of Joining");
+				  
+                  int check=0;   
+                  System.out.println("       \tIdentity\tFirst Name\tLast Name\tAge\tCity     \tDepartment\tDate Of Joining");
 				 // System.out.println("\tid "+"\tfname "+"\t\tlname "+"\t\tage"+"\t\tcity"+"\t\tdepartment"+"\t\tdate_of_joining");
-					
+			
 				  while(resultSet.next())
 					{
 					    //System.out.println("\t\t"+resultSet.getString(1)+"  "+resultSet.getString(2)+"\t"+resultSet.getString(3)+"\t\t"+resultSet.getString(4)+"\t\t"+resultSet.getString(5)+"\t\t"+resultSet.getString(6)+"\t\t"+resultSet.getString(7));
 					    System.out.println("\t\t"+resultSet.getString(1)+"\t"+resultSet.getString(2)+"\t\t"+resultSet.getString(3)+"     \t"+resultSet.getString(4)+"\t"+resultSet.getString(5)+"\t\t"+resultSet.getString(6)+"\t\t"+resultSet.getString(7));
-						  
+						  check++;
 					
 					}
+				  if(check==0)
+				  {
+					  System.out.println("No Data Present");
+				  }
+				  
+                  
 				connection.close();
 			    }
 			catch(Exception e)
@@ -364,20 +411,18 @@ public class MysqlOperation {
 				Statement statement = connection.createStatement();
 				String query = "select * from family_Table";
 				ResultSet resultSet = statement.executeQuery(query);
-				if(resultSet == null)
-				{
-				System.out.println("Record Not Found");
-				}
-				else
-				{
-					System.out.println("      \tIdentity\tFather Name   \tMother Name\tEmp_ID");
-					 // System.out.println("\tid "+"\tfname "+"\t\tlname "+"\t\tage"+"\t\tcity"+"\t\tdepartment"+"\t\tdate_of_joining");
-					
-					  while(resultSet.next())
+				int check=0;
+				System.out.println("      \tIdentity\tFather Name   \tMother Name\tEmp_ID");
+				 // System.out.println("\tid "+"\tfname "+"\t\tlname "+"\t\tage"+"\t\tcity"+"\t\tdepartment"+"\t\tdate_of_joining");
+				 while(resultSet.next())
 						{
 						    //System.out.println("\t\t"+resultSet.getString(1)+"  "+resultSet.getString(2)+"\t"+resultSet.getString(3)+"\t\t"+resultSet.getString(4)+"\t\t"+resultSet.getString(5)+"\t\t"+resultSet.getString(6)+"\t\t"+resultSet.getString(7));
 						    System.out.println("\t\t"+resultSet.getString(1)+"\t"+resultSet.getString(2)+"      \t"+resultSet.getString(3)+"     \t"+resultSet.getString(4));
+						    check++;
 						}
+		        if(check==0)
+		        {
+		        	System.err.println("No Data Present...");
 		        }
 				connection.close();
 			    }
@@ -397,14 +442,18 @@ public class MysqlOperation {
 					ResultSet resultSet=statement.executeQuery(query);
 					System.out.println("       \tIdentity\tFirst Name\tLast Name\tAge\tCity     \tDepartment\tDate Of Joining");
 					 // System.out.println("\tid "+"\tfname "+"\t\tlname "+"\t\tage"+"\t\tcity"+"\t\tdepartment"+"\t\tdate_of_joining");
-						
+						int check=0;
 					  while(resultSet.next())
 						{
 						    //System.out.println("\t\t"+resultSet.getString(1)+"  "+resultSet.getString(2)+"\t"+resultSet.getString(3)+"\t\t"+resultSet.getString(4)+"\t\t"+resultSet.getString(5)+"\t\t"+resultSet.getString(6)+"\t\t"+resultSet.getString(7));
 						    System.out.println("\t\t"+resultSet.getString(1)+"\t"+resultSet.getString(2)+"\t\t"+resultSet.getString(3)+"     \t"+resultSet.getString(4)+"\t"+resultSet.getString(5)+"\t\t"+resultSet.getString(6)+"\t\t"+resultSet.getString(7));
-							  
+							  check++;
 						
 						}
+					  if(check==0)
+					  {
+						  System.err.println("No Data Present...");
+					  }
 			}
 			catch(Exception e)
 			{
@@ -428,7 +477,7 @@ public class MysqlOperation {
 				  {
 					  int total=resultSet.getInt("total_employee");
 					  
-					  System.out.print(total);
+					  System.out.print(total+"\n");
 				  }
 			 }
 			 
@@ -454,7 +503,8 @@ public class MysqlOperation {
 				  {
 					  int total=resultSet.getInt("total_employee");
 					  
-					  System.out.print(total);
+					  System.out.print(total+"\n");
+					  
 				  }
 			 }
 			 
@@ -471,32 +521,43 @@ public class MysqlOperation {
 				Class.forName("com.mysql.cj.jdbc.Driver");
 	 			Connection connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/student?useSSl=false","root","root");
 		
-				  Statement statement =connection.createStatement();
-				  System.out.println("Enter Start Date ");
+				    Statement statement=connection.createStatement();
+				    System.out.println("Enter Start Date ");
 					String startDate = sc.next();
 
 					System.out.println("Enter End Date ");
 					String endDate = sc.next();
 					
-			      String query = "select * from emp_information where Date_Of_Joining between " + " '" + startDate + "' AND ' " +endDate+"'";
-				  ResultSet resultSet =statement.executeQuery(query);
-				  if(resultSet!=null) {
-				  System.out.println("       \tIdentity\tFirst Name\tLast Name\tAge\tCity     \tDepartment\tDate Of Joining");
-				
+					String dateregex = "^\\d{4}\\d{2}\\d{2}$";
+					Pattern r = Pattern.compile(dateregex);
+				    Matcher m = r.matcher(startDate);
+				    Matcher m1 = r.matcher(endDate);
+				    if(m.find())
+				    {
+				    }
+				    else if(m1.find())
+				    {
+				    }
+				    else
+				    {
+				    	System.out.println("Invalid Date Formate");
+				    	display();
+				    }
+				   String query = "select * from emp_information where Date_Of_Joining between " + " '" +startDate+ "' AND ' " +endDate+"'";
+				   ResultSet resultSet =statement.executeQuery(query);
+				   int check=0;
+				   System.out.println("       \tIdentity\tFirst Name\tLast Name\tAge\tCity     \tDepartment\tDate Of Joining");
 				  while(resultSet.next())
 					{
 					 
 				        System.out.println("\t\t"+resultSet.getString(1)+"\t"+resultSet.getString(2)+"\t\t"+resultSet.getString(3)+"     \t"+resultSet.getString(4)+"\t"+resultSet.getString(5)+"\t\t"+resultSet.getString(6)+"\t\t"+resultSet.getString(7));
+				        check++;
 					}
+				  if(check==0)
+				  {
+					  System.err.println("No Data Present...");
+				  }
 			 }
-				  else
-					{
-					  System.out.println("NO Data Found..");
-						
-					}
-			  }
-			
-			 
 			catch(Exception e)
 			{
 			System.out.println(e);
@@ -504,10 +565,152 @@ public class MysqlOperation {
 			break;
 		
 		case 9:
+			try
+			{
+				Class.forName("com.mysql.cj.jdbc.Driver");
+	 			Connection connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/student?useSSl=false","root","root");
+				Statement statement = connection.createStatement();
+				//String checkEmpId="select  Dept_Name from emp_information join Department on emp_information.dept_id=Department.dept_id group by Department_Name order by count(*) desc limit 1;"
+
+				String checkEmpId="SELECT *FROM Department WHERE dept_id IN(SELECT dept_id FROM emp_information GROUP BY dept_id HAVING count(*) IN (SELECT Max(Dept_Name) FROM (SELECT COUNT(*) as  Dept_Name FROM emp_information GROUP BY dept_id) alias));";
+			 ResultSet resultSet = statement.executeQuery(checkEmpId);
+				System.out.println("Highest Employee on Department");
+				
+			
+			 while(resultSet.next())
+		     {
+				//newId=resultSet.getString("Dept_Name");
+				System.out.println(resultSet.getString(2));
+			 }
+	         
+				connection.close();
+
+			}
+			catch(Exception e)
+			{
+			System.out.println(e);
+			}
+			System.out.println();
+			break;
+			
+		case 10:
+			try
+			{
+				Class.forName("com.mysql.cj.jdbc.Driver");
+	 			Connection connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/student?useSSl=false","root","root");
+				Statement statement = connection.createStatement();
+				//String checkEmpId="select  Dept_Name from emp_information join Department on emp_information.dept_id=Department.dept_id group by Department_Name order by count(*) asc it 1;"
+
+				String checkEmpId="SELECT *FROM Department WHERE dept_id IN(SELECT dept_id FROM emp_information GROUP BY dept_id HAVING count(*) IN (SELECT Min(Dept_Name) FROM (SELECT COUNT(*) as  Dept_Name FROM emp_information GROUP BY dept_id) alias));";
+			 ResultSet resultSet = statement.executeQuery(checkEmpId);
+				System.out.println("Lowest Employee on Department");
+			
+			 while(resultSet.next())
+		     {
+				//newId=resultSet.getString("Dept_Name");
+				System.out.println(resultSet.getString(2));
+			 }
+	         
+				connection.close();
+
+			}
+			catch(Exception e)
+			{
+			System.out.println(e);
+			}
+			System.out.println();
+			break;
+		case 11:
+			System.out.println("City Name");
+			String city_name=sc.nextLine();
+		    city_name=city_name.replaceAll("[^a-zA-Z]","");
+			System.out.println("Department Name");
+			String dept_name=sc.nextLine();
+			dept_name=dept_name.replaceAll("[^a-zA-Z]","");  
+			
+			
+			try
+			{
+				Class.forName("com.mysql.cj.jdbc.Driver");
+	 			Connection connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/student?useSSl=false","root","root");
+				Statement statement = connection.createStatement();
+				String checkEmpId="SELECT id,First_name FROM emp_information e JOIN city c ON  c.city_name='"+city_name+"' And e.dept_name='"+dept_name+"';";	
+				//String checkEmpId="SELECT id,First_name, city_name,dept_name FROM emp_information e JOIN city c ON  c.city_name='"+city_name+"' AND e.dept_name='"+dept_name+"';";
+			   ResultSet resultSet = statement.executeQuery(checkEmpId);
+			  if(resultSet.equals(null))
+			   {}
+			   else
+			   {boolean b=false;
+			 while(b=resultSet.next())
+		     {  
+				 if(resultSet.getString(1)==null)
+				 {
+					 
+				 }
+				 else
+				 {
+				
+				System.out.println(resultSet.getString(1)+"   "+resultSet.getString(2));
+			 }
+
+		     }
+			   }
+				connection.close();
+
+			}
+			catch(Exception e)
+			{
+			System.out.println(e);
+			}
+		break;
+		
+		case 12:
+			Scanner sc=new Scanner(System.in);
+			//Scanner sc=new Scanner(System.in);
+			System.out.println("Month");
+			String month=sc.nextLine();
+			month=month.replaceAll("[^a-zA-Z0-9]","");
+			System.out.println("Year");
+			String year=sc.nextLine();
+			year=year.replaceAll("[^a-zA-Z0-9]","");  
+			
+			
+			try
+			{
+				Class.forName("com.mysql.cj.jdbc.Driver");
+	 			Connection connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/student?useSSl=false","root","root");
+				Statement statement = connection.createStatement();
+				//String query="select date(date_of_joining),count(*) from emp_information where MONTH(date_of_joining)=MONTH(now()) and YEAR(date_of_joining)=YEAR(now()) group by date(date_of_joining);";	
+				//String query="select First_Name ,Last_Name from emp_information where MONTH(date_of_joining)=MONTH(now()) and YEAR(date_of_joining)=YEAR(now()) group by date(date_of_joining);";
+				String query="select First_Name,Last_Name from emp_information where MONTH(date_of_joining)='"+month+"' and YEAR(date_of_joining)='"+year+"' group by date(date_of_joining);";
+
+				ResultSet resultSet = statement.executeQuery(query);
+				int i=0;
+
+			 while(resultSet.next())
+		     {
+				i++;
+				System.out.println(resultSet.getString(1)+"   "+resultSet.getString(2)); // Date and Count
+				//System.out.println(resultSet.getString(1)+"  "+resultSet.getString(2)); // Name and Surname 
+			 }
+
+			 if(i==0)
+			 {
+				 System.out.println("NO DATA Present");
+			 }
+			   
+				connection.close();
+
+			}
+			catch(Exception e)
+			{
+			System.out.println(e);
+			}
+	        break;	
+		case 13:
 		{
 			System.out.println("Exit From Display Operation");
 			 operationChoice= 2;
-			 
 		}
 		break;
 
@@ -524,7 +727,7 @@ public class MysqlOperation {
 	static void delete()
 	{
 		System.out.println("Delete");
-         System.out.println("Enter identity number");
+        System.out.println("Enter identity number");
 		String s1 = sc.nextLine();
 		
 		try

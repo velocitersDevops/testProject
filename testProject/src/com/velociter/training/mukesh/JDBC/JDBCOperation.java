@@ -29,11 +29,11 @@ public class JDBCOperation
 			
 			String sql_query="select * from emp_info";     //  query for select 
 			ResultSet rs= statement.executeQuery(sql_query);
-			System.out.println("ID\tFIRSTNAME\tLASTNAME\tAGE\tCITY\tSTATUS\tDEPARTMENT\t DATE_OF_JOINING\tDEPT_ID");
+			System.out.println("ID\tFIRSTNAME\tLASTNAME\tAGE\tCITY\tSTATUS\tDEPARTMENT\tDATE_OF_JOINING\tDEPT_ID");
 			System.out.println("===========================================================================================================");
 			while(rs.next())
 			{
-				System.out.println(rs.getInt(1)+ "\t " +rs.getString(2)+ "\t\t " +rs.getString(3)+ "\t\t" +rs.getInt(4)+ "\t" +rs.getString(5)+ "\t  " +rs.getInt(6)+ "\t  "+rs.getString(7)+ "\t\t"+rs.getDate(8)+"\t\t"+rs.getInt(9));
+				System.out.println(rs.getInt(1)+ "\t " +rs.getString(2)+ "\t\t " +rs.getString(3)+ "\t\t" +rs.getInt(4)+ "\t" +rs.getString(5)+ "\t  " +rs.getInt(6)+ "\t  "+rs.getString(7)+ "\t\t"+rs.getDate(8)+"\t "+rs.getInt(9));
 				
 			}
 			connection.close();
@@ -283,9 +283,9 @@ public class JDBCOperation
 				id=input.nextInt();
 			}
 			
-			System.out.println("Enter column which you want to update : first_name,last_name,age,city,department");
+			System.out.println("Enter column which you want to update : first_name,last_name,age,city,department,dept_id");
 			String column=input.next();
-			if(!column.equals("first_name")&&!column.equals("last_name")&&!column.equals("age")&&!column.equals("city")&&!column.equals("department"))
+			if(!column.equals("first_name")&&!column.equals("last_name")&&!column.equals("age")&&!column.equals("city")&&!column.equals("department")&&!column.equals("dept_id"))
 			{
 			
 				System.out.println("invalid retype column name");
@@ -818,7 +818,9 @@ public class JDBCOperation
 			
 			statement = connection.createStatement();     
 			
-			String sql_query="select count(*) as total,dept_name from emp_info INNER JOIN department ON emp_info.dept_id=department.did group by dept_name order by total asc limit 2";     
+			String sql_query="select DISTINCT dept_name from emp_info INNER JOIN department ON emp_info.dept_id=department.did IN"
+					+ "(select dept_id from emp_info group by dept_id having count(*)IN"
+					+ "(select min(dept_name) from (select count(*) as dept_name from emp_info group by dept_id)as mytable))";     
 			ResultSet rs= statement.executeQuery(sql_query);
 			System.out.println("Having minimum employee department name :");
 			System.out.println();
