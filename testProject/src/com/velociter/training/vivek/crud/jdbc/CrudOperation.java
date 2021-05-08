@@ -173,7 +173,7 @@ public class CrudOperation
 		  System.out.println("press 10 : To find detail of employee who has not given their family id");
 		  System.out.println("press 11: total no of employee who has not given their family detail");
 		  System.out.println("press 12: tota no of employee who has not given their family detail");
-		  System.out.println("press 13: to add family datil of employee");
+		  System.out.println("press 13: to add family detail of employee");
 		  
 		//  Scanner scanner = new Scanner(System.in);
 		  
@@ -1392,8 +1392,9 @@ public class CrudOperation
 			  {
                  Statement statement=connection.createStatement();
 				  
+				  System.out.println("Please enter which position of the department that you want");
 				  
-				  String sqlQuery="select department_name from ( select count(*) as max_no_employ ,department.department_name from emp_info ,department where emp_info.dept_id=department.id group by emp_info.dept_id having max_no_employ =(select max(no_of_employ) from( select count(dept_id) as no_of_employ from emp_info , department where emp_info.dept_id=department.id group by emp_info.dept_id order by no_of_employ)as empdetails) ) as newtable";
+				  String sqlQuery=" select department_name from ( select count(*) as max_no_employ ,department.department_name from emp_info inner join department on emp_info.dept_id=department.id group by emp_info.dept_id having max_no_employ =(select max(no_of_employ ) from( select count(dept_id) as no_of_employ from emp_info inner join department on emp_info.dept_id=department.id group by emp_info.dept_id order by no_of_employ)as empdetails) ) as newtable";
 				  ResultSet resultSet=statement.executeQuery(sqlQuery);
 				  
 				  System.out.println("\t\tdepartment_name ");
@@ -1415,6 +1416,84 @@ public class CrudOperation
 				  e.printStackTrace();
 			  }
 			  break;
+			  
+			  
+			  
+			  
+		  case 21:
+			  try
+			  {
+                 Statement statement=connection.createStatement();
+				  
+				 // System.out.println("Please enter which position of the department that you want");
+				  
+				  String sqlQuery=" select   department.department_name ,count(emp_info.dept_id)as totalcount from emp_info,department where emp_info.dept_id=department.id group by emp_info.dept_id";
+				  ResultSet resultSet=statement.executeQuery(sqlQuery);
+				  
+				  System.out.print("\t\tdepartment_name ");
+				  System.out.println("\t\tEmp_dept_count");
+				  System.out.println("\t\t==============================================");
+				  
+				  while(resultSet.next())
+				  {
+					  String fname=resultSet.getString("department_name");
+					  int employCount=resultSet.getInt("totalCount");
+					  System.out.println("\t\t"+fname+"\t\t\t\t"+employCount);
+				  } 
+			  }
+			  
+			  catch(CommunicationsException ee)
+			  {
+				  System.out.println("database not reachable");
+			  }
+			  catch(SQLException e)
+			  {
+				  e.printStackTrace();
+			  }
+			  break;
+			  
+			  
+		  case 20:
+			  
+			  try
+			  {
+                 Statement statement=connection.createStatement();
+                 System.out.println("Please enter  1:name of the department that contain 1st highest no of employ");
+                 System.out.println("Please enter  2:name of the department that contain 2nd highest no of employ");
+                 System.out.println("Please enter  3:name of the department that contain 3rd highest no of employ and so on");
+                 int n=scanner.nextInt();
+				  
+				  String sqlQuery=" select * from (select department.department_name, count(emp"
+				  		+ "_info.dept_id)as employcount from emp_info,department where emp_info.dept_id=departme"
+				  		+ "nt.id group by dept_id order by employcount)as newemptable where "+n+ "-1=( select co"
+				  		+ "unt(distinct(totalemp)) from( select department.department_name"
+				  		+ " ,count(emp_info.id)as totalemp from emp_info ,department where emp_info.dept_id"
+				  		+ " =department.id group by emp_info.dept_id)as newtable where newemptable.employco"
+				  		+ "unt < newtable.totalemp)";
+				  ResultSet resultSet=statement.executeQuery(sqlQuery);
+				  
+				  System.out.print("\t\tdepartment_name ");
+				  System.out.println("\t\temp_dept_count");
+				  System.out.println("\t\t==============================================");
+				  
+				  while(resultSet.next())
+				  {
+					  String fname=resultSet.getString("department_name");
+					  int employCount=resultSet.getInt("employcount");
+					  System.out.println("\t\t"+fname+"\t\t\t\t"+employCount);
+				  } 
+			  }
+			  
+			  catch(CommunicationsException ee)
+			  {
+				  System.out.println("database not reachable");
+			  }
+			  catch(SQLException e)
+			  {
+				  e.printStackTrace();
+			  }
+			  break;
+			  
 			  
 			  
 			  default :
