@@ -954,6 +954,58 @@ public class MysqlOperation {
 			
 		case 16:
 			
+			String city="",city_id="";
+		    System.out.println(" Enter City Name.....");
+			city=sc.nextLine();
+			city=city.replaceAll("[^a-zA-Z]","");  
+			
+			if(city.equals("Pune")||city.equals("pune"))
+		 {
+			 city_id=""+2;
+		 }
+		 
+		 else if(city.equals("Noida")||city.equals("noida"))
+		 {
+			 city_id=""+3;
+		 }
+		 
+		 else if(city.equals("Indore")||city.equals("indore"))
+		 {
+			 city_id=""+1;
+		 }
+
+		 
+		try
+		{
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Connection connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/student?useSSl=false","root","root");
+			Statement statement = connection.createStatement();
+			
+			//String query="select max(dept_name) from emp_information e1 where 1-1=(select count(Distinct dept_name)from emp_information e2 where (e2.dept_name>e1.dept_name) and city_id='"+city_id+"') and city_id='"+city_id+"';";
+		    String query="SELECT Dept_Name, city_name AS 'City',COUNT(*) AS 'No of Employees'  FROM city INNER JOIN emp_information ON emp_information.city_id =city.city_id where emp_information.city_id='"+city_id+"'GROUP BY emp_information.dept_id,Dept_Name ORDER BY 3 desc limit 3;";
+			ResultSet resultSet = statement.executeQuery(query);
+			int i=0;
+			System.out.println("\tDepartment\tCity Name\tNo Of Employee");
+			//System.out.println("2nd highest no.of employees hired in the "+city+" location :");
+			 while(resultSet.next())
+				{
+				    //System.out.println(resultSet.getString(1));
+			        System.out.println("\t"+resultSet.getString(1)+"\t\t"+resultSet.getString(2)+"\t\t"+resultSet.getString(3));
+			        i++;
+				}
+
+		 if(i==0)
+		 {
+			 System.out.println("NO DATA Present");
+		 }
+		   
+			connection.close();
+
+		}
+		catch(Exception e)
+		{
+		System.out.println(e);
+		}
 					
 			
 			break;
