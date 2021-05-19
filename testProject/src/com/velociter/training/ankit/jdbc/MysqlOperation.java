@@ -17,7 +17,7 @@ public class MysqlOperation {
 		int operationChoice= 1;
         do
 		{
-		System.out.println("Enter Your Choice \n1.Insert Into Employee Table\n2.Insert Into Family Table\n3.Exit");
+		System.out.println("\nEnter Your Choice \n1.Insert Into Employee Table\n2.Insert Into Family Table\n3.Exit");
 		int choice=new_sc.nextInt();
 		switch(choice)
 		{
@@ -267,9 +267,15 @@ public class MysqlOperation {
 		do
 		{
 		
-		System.out.println("Enter Your Choice \n1.DisplayAll\n2.Total Employee in Each Department\n3.Employee details whose name starts with given first name or any single character\n4.Display Family Table\n5.Details of employees, who has added family details into the family table.\n6.Display total no. of employees, who has not added family details into the family table\n7.Display total no. of employees, who has added family details into the family table.\n8."
-				+"Employee details,from current start date to end date\n9.Display department name, where the highest number of employees working in that department\n10.Display department name, where the lowest number of employees working in that department\n11.Name.of employees, who are working in the  department in the location\n12.Name of employees,who have joined current month and find name after give input options where users can give month,year and location"
-				+ "\n13.Exit");
+		System.out.println("\nEnter Your Choice \n1.DisplayAll\n2.Total Employee in Each Department\n3.Employee details whose name starts with given first name or any single character\n4.Display Family Table\n5.Details of employees, who has added family details into the family table.\n6.Display total no. of employees, who has not added family details into the family table\n7.Display total no. of employees, who has added family details into the family table.\n8."
+				+"Employee details,from current start date to end date\n9.Display department name, where the highest number of employees working in that department"
+				+ "\n10.Display department name, where the lowest number of employees working in that department"
+				+ "\n11.Name.of employees, who are working in the  department in the location"
+				+ "\n12.Name of employees,who have joined current month and find name after give input options where users can give month,year and location"
+				+ "\n13.list of the employees, who has experience  and  location.(user to enter location)"
+				+ "\n15.Display employee details where the 2nd highest no.of employees hired in the pune location.(user to enter location)."
+				+ "\n16.To get 3 maximum department names, where the highest strength of the  employees is in X location."
+				+ "\n17.Exit");
 		int choice=new_sc.nextInt();
 		
 		switch(choice)
@@ -666,13 +672,22 @@ public class MysqlOperation {
 		
 		case 12:
 			Scanner sc=new Scanner(System.in);
-			//Scanner sc=new Scanner(System.in);
+			String month="",year="",city="";
+			int x=1;
+			do
+			{
 			System.out.println("Month");
-			String month=sc.nextLine();
-			month=month.replaceAll("[^a-zA-Z0-9]","");
+			 month=sc.nextLine();
+			month=month.replaceAll("[^0-9]","");
 			System.out.println("Year");
-			String year=sc.nextLine();
-			year=year.replaceAll("[^a-zA-Z0-9]","");  
+			year=sc.nextLine();
+			year=year.replaceAll("[^0-9]","");  
+			
+			System.out.println("City");
+			city=sc.nextLine();
+			city=city.replaceAll("[^a-zA-Z]","");  
+		 }
+			while(month.equals("")&&year.equals("")&&city.equals(""));
 			
 			
 			try
@@ -682,15 +697,15 @@ public class MysqlOperation {
 				Statement statement = connection.createStatement();
 				//String query="select date(date_of_joining),count(*) from emp_information where MONTH(date_of_joining)=MONTH(now()) and YEAR(date_of_joining)=YEAR(now()) group by date(date_of_joining);";	
 				//String query="select First_Name ,Last_Name from emp_information where MONTH(date_of_joining)=MONTH(now()) and YEAR(date_of_joining)=YEAR(now()) group by date(date_of_joining);";
-				String query="select First_Name,Last_Name from emp_information where MONTH(date_of_joining)='"+month+"' and YEAR(date_of_joining)='"+year+"' group by date(date_of_joining);";
+				String query="select First_Name,Last_Name from emp_information where MONTH(date_of_joining)='"+month+"' and YEAR(date_of_joining)='"+year+"' and city ='"+city+"' group by date(date_of_joining);";
 
 				ResultSet resultSet = statement.executeQuery(query);
 				int i=0;
-
+	             System.out.println("Name of the Employee :");
 			 while(resultSet.next())
 		     {
 				i++;
-				System.out.println(resultSet.getString(1)+"   "+resultSet.getString(2)); // Date and Count
+				System.out.println(resultSet.getString(1)+" "+resultSet.getString(2)); // Date and Count
 				//System.out.println(resultSet.getString(1)+"  "+resultSet.getString(2)); // Name and Surname 
 			 }
 
@@ -706,8 +721,243 @@ public class MysqlOperation {
 			{
 			System.out.println(e);
 			}
-	        break;	
+	        break;
+	        
 		case 13:
+			
+			String experience="",cityName="",city_id="";
+			Scanner scan=new Scanner(System.in);
+			do
+			{
+			System.out.println("Experience");
+			experience=scan.nextLine();
+			experience=experience.replaceAll("[^0-9]","");
+			System.out.println("City");
+			cityName=scan.nextLine();
+			cityName=cityName.replaceAll("[^a-zA-Z]","");  
+		 }
+			while(experience.equals("")&&cityName.equals(""));
+			 if(cityName.equals("Pune")||cityName.equals("pune"))
+			 {
+				 city_id=""+2;
+			 }
+			 
+			 else if(cityName.equals("Noida")||cityName.equals("noida"))
+			 {
+				 city_id=""+3;
+			 }
+			 
+			 else if(cityName.equals("Indore")||cityName.equals("indore"))
+			 {
+				 city_id=""+1;
+			 }
+			
+			 
+			try
+			{
+				Class.forName("com.mysql.cj.jdbc.Driver");
+	 			Connection connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/student?useSSl=false","root","root");
+				Statement statement = connection.createStatement();
+				
+				//String query="select * from emp_information e,city c where c.city_name='"+city+"' and (year(curdate())-year(date_of_Joining))>="+experience;;
+	             
+				String query="select id,FIRST_NAME,Last_name,Date_of_Joining from emp_information e join city c on (c.city_id='"+city_id+"' and E.city_id='"+city_id+"') where (year(curdate())-year(date_of_Joining))>="+experience;;
+				ResultSet resultSet = statement.executeQuery(query);
+				int i=0;
+	             System.out.println("id\tFirst Name\tLast Name\tDate_of Joining");
+			 while(resultSet.next())
+		     {
+				i++;
+				System.out.println(resultSet.getString(1)+"  \t"+resultSet.getString(2)+"\t\t"+resultSet.getString(3)+"\t\t"+resultSet.getString(4)); // Date and Count
+				//System.out.println(resultSet.getString(1)+"  "+resultSet.getString(2)); // Name and Surname 
+			 }
+
+			 if(i==0)
+			 {
+				 System.out.println("NO DATA Present");
+			 }
+			   
+				connection.close();
+
+			}
+			catch(Exception e)
+			{
+			System.out.println(e);
+			}
+			
+			break;
+	        
+		case 14:
+			
+			String dept="",cityN="",city_Id="",dateOfCom="";
+			Scanner scanner=new Scanner(System.in);
+			do
+			{
+			System.out.println("Department");
+			dept=scanner.nextLine();
+			dept=dept.replaceAll("[^a-zA-Z]","");
+			System.out.println("City");
+			cityN=scanner.nextLine();
+			cityN=cityN.replaceAll("[^a-zA-Z]","");  
+			
+			
+			System.out.println("Enter Day");
+			int date=scanner.nextInt();
+			String date_s=""+date;
+			if(date_s.length()==1)
+			{
+				date_s="0"+date_s;
+			}
+			System.out.println("Enter Month");
+			int monthEntry=scanner.nextInt();
+			String month_s=""+monthEntry;
+			if(month_s.length()==1)
+			{
+				month_s="0"+month_s;
+			}
+			System.out.println("Enter full Year");
+			int yearEntry=scanner.nextInt();
+			
+			if((date>0 && date<32)&&(monthEntry>0 && monthEntry<13)&&(yearEntry>1990))
+			{
+				dateOfCom=yearEntry+""+month_s+""+date_s;
+				dateOfCom=dateOfCom.replaceAll("[^0-9/-]","");
+			//System.out.println(dateOfJoin);
+			String dateregex = "^\\d{4}\\d{2}\\d{2}$";
+			Pattern r = Pattern.compile(dateregex);
+		    Matcher m = r.matcher(dateOfCom);
+		    if(m.find())
+		    {
+		    }
+		    else
+		    {
+		    	System.out.println("Invalid Date Formate");
+		    	
+		    }
+			
+		 }
+			}
+			while(dept.equals("")&&cityN.equals(""));
+			 if(cityN.equals("Pune")||cityN.equals("pune"))
+			 {
+				 city_Id=""+2;
+			 }
+			 
+			 else if(cityN.equals("Noida")||cityN.equals("noida"))
+			 {
+				 city_Id=""+3;
+			 }
+			 
+			 else if(cityN.equals("Indore")||cityN.equals("indore"))
+			 {
+				 city_Id=""+1;
+			 }
+			
+			 
+			try
+			{
+				Class.forName("com.mysql.cj.jdbc.Driver");
+	 			Connection connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/student?useSSl=false","root","root");
+				Statement statement = connection.createStatement();
+				
+				//String query="select * from emp_information e,city c where c.city_name='"+city+"' and (year(curdate())-year(date_of_Joining))>="+experience;;
+	             
+
+				 String query="select id,FIRST_NAME,Last_name,Date_of_Joining from emp_information e join city c on (c.city_id='"+city_Id+"' and E.city_id='"+city_Id+"') where date_of_joining<'"+dateOfCom+"' and e.dept_name='"+dept+"';";
+				ResultSet resultSet = statement.executeQuery(query);
+				int i=0;
+	             System.out.println("id\tFirst Name\tLast Name\tDate_of Joining");
+			 while(resultSet.next())
+		     {
+				i++;
+				System.out.println(resultSet.getString(1)+"  \t"+resultSet.getString(2)+"\t\t"+resultSet.getString(3)+"\t\t"+resultSet.getString(4)); // Date and Count
+				//System.out.println(resultSet.getString(1)+"  "+resultSet.getString(2)); // Name and Surname 
+			 }
+
+			 if(i==0)
+			 {
+				 System.out.println("NO DATA Present");
+			 }
+			   
+				connection.close();
+
+			}
+			catch(Exception e)
+			{
+			System.out.println(e);
+			}
+			scanner.close();			
+			break;
+		
+		case 15:
+			Scanner scanner1=new Scanner(System.in);
+			String city_n="",city_i="",position_s="";
+			System.out.println("City");
+			city_n=scanner1.nextLine();
+			city_n=city_n.replaceAll("[^a-zA-Z]","");  
+	 		
+	 		if(city_n.equals("Pune")||city_n.equals("pune"))
+			 {
+				 city_id=""+2;
+			 }
+			 
+			 else if(city_n.equals("Noida")||city_n.equals("noida"))
+			 {
+				 city_id=""+3;
+			 }
+			 
+			 else if(city_n.equals("Indore")||city_n.equals("indore"))
+			 {
+				 city_id=""+1;
+			 }
+			
+			 
+			try
+			{
+				Class.forName("com.mysql.cj.jdbc.Driver");
+				Connection connection =  DriverManager.getConnection("jdbc:mysql://localhost:3306/student?useSSl=false","root","root");
+				Statement statement = connection.createStatement();
+				
+				//String query="select * from emp_information e,city c where c.city_name='"+city+"' and (year(curdate())-year(date_of_Joining))>="+experience;;
+	            
+	             //String query="SELECT id,First_Name,Last_Name,dept_name ,MAX(dept_name)  FROM emp_information WHERE dept_name < (SELECT MAX(dept_name) FROM emp_information where city_id='"+city_id+"') and city_id='"+city_id+"';";
+	             //String query="SELECT MAX(dept_name)  FROM emp_information WHERE dept_name not in (SELECT MAX(dept_name) FROM emp_information where city_id='"+city_id+"') and city_id='"+city_id+"';";
+	            //String query="select max(dept_name) from emp_information e1 where '"+position_s+"'-1=(select count(Distinct dept_name)from emp_information e2 where (e2.dept_name>e1.dept_name) and city_id='"+city_id+"') and city_id='"+city_id+"';";
+	            String query="select max(dept_name) from emp_information e1 where 1-1=(select count(Distinct dept_name)from emp_information e2 where (e2.dept_name>e1.dept_name) and city_id='"+city_i+"') and city_id='"+city_i+"';";
+	              
+	             //String query="select id,FIRST_NAME,Last_name,Date_of_Joining from emp_information e join city c on (c.city_id='"+city_id+"' and E.city_id='"+city_id+"') where date_of_joining<'"+dateOfCom+"' and e.dept_name='"+dept+"';";
+				ResultSet resultSet = statement.executeQuery(query);
+				int i=0;
+				//System.out.println("       \tIdentity\tFirst Name\tLast Name\tDepartment");
+				//System.out.println("2nd highest no.of employees hired in the "+city+" location :");
+				 while(resultSet.next())
+					{
+					 System.out.println("2nd highest no.of employees hired in "+resultSet.getString(1)+" department in the "+city_n+" location.");
+					    //System.out.println(resultSet.getString(1));
+				        //System.out.println("\t\t"+resultSet.getString(1)+"\t"+resultSet.getString(2)+"\t\t"+resultSet.getString(3)+"     \t"+resultSet.getString(4));
+				        i++;
+					}
+
+			 if(i==0)
+			 {
+				 System.out.println("NO DATA Present");
+			 }
+			   
+				connection.close();
+
+			}
+			catch(Exception e)
+			{
+			System.out.println(e);
+			}
+			break;
+			
+		case 16:
+			
+					
+			
+			break;
+		case 17:
 		{
 			System.out.println("Exit From Display Operation");
 			 operationChoice= 2;
